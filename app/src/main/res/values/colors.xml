@@ -1,0 +1,20 @@
+<resources>
+    <!-- Hintergrund -->
+    <color name="activity_background">#FFF7F9FC</color>  <!-- sehr helles Grau mit leichtem Blau -->
+
+    <!-- Primärfarbe (Buttons, Highlights) -->
+    <color name="primary_blue">#3B82F6</color>        <!-- helles Blau -->
+    <color name="primary_blue_dark">#1E40AF</color>  <!-- dunkler für Kontrast -->
+
+    <!-- Akzent -->
+    <color name="accent_green">#10B981</color>        <!-- frisches, positives Grün -->
+
+    <!-- Textfarben -->
+    <color name="text_primary">#1F2937</color>        <!-- dunkles Grau für Lesbarkeit -->
+    <color name="text_secondary">#6B7280</color>      <!-- helleres Grau für Labels -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+
+    <!-- Placeholder Graphic -->
+    <color name="placeholder_graphic">#EEEEEE</color>
+</resources>

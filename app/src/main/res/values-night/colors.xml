@@ -1,0 +1,8 @@
+<resources>
+    <!-- Hintergrund -->
+    <color name="activity_background">#1F2937</color>  <!-- dunkles Grau -->
+
+    <!-- Textfarben -->
+    <color name="text_primary">#FFFFFFFF</color>        <!-- weiss -->
+    <color name="text_secondary">#9CA3AF</color>      <!-- helleres Grau -->
+</resources>

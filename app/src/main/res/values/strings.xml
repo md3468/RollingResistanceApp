@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">RollingResistanceApp</string>
+
+    <!-- First Page -->
+    <!-- Headline -->
+    <string name="rolling_resistance_test">Rolling Resistance Test</string>
+    <string name="crr_testbench_subtitle">A simple test bench for bicycle tire rolling resistance</string>
+
+    <!-- Switch mode
+    <string name="switch_mode">Mode</string> -->
+
+    <!-- Graphic -->
+    <string name="placeholder_graphic">Placeholder graphic</string>
+
+    <!-- Text field -->
+    <string name="tire_example_28_inch">Tire model (e.g., 28-inch gravel tire)</string>
+    <string name="tire_pressure_bar">Tire pressure [bar]</string>
+    <string name="temperature_celsius">Temperature [°C]</string>
+    <string name="speed_kmh">Speed v [km/h]</string>
+    <string name="idle_power_p0_w">Idle power P<sub><small>0</small></sub> [W]</string>
+    <string name="loaded_power_ploaded_w">Loaded power P<sub><small>loaded</small></sub> [W]</string>
+    <string name="mass_on_tire_m_kg">Mass applied on tire m [kg]</string>
+
+    <!-- Checkbox -->
+    <string name="tire_tubeless">Tubeless tire</string>
+    <string name="temperature_stable">Temperature stable</string>
+    <string name="tire_pressure_checked_later">Tire pressure checked afterwards</string>
+
+    <!-- Buttons -->
+    <string name="clear_input">Clear all</string>
+    <string name="go_to_list">Go to List</string>
+    <string name="save_to_list">Save</string>
+
+    <!-- Second Page
+    <string name="back">Back</string>-->
+</resources>
