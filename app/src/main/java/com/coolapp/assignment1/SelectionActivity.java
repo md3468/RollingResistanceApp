@@ -56,9 +56,9 @@ public class SelectionActivity extends AppCompatActivity {
         Button btnManual = findViewById(R.id.btn_manual_input);
         Button btnEsp = findViewById(R.id.btn_esp_input);
 
-        btnManual.setOnClickListener(v -> {
-            startActivity(new Intent(SelectionActivity.this, MainActivity.class));
-        });
+        btnManual.setOnClickListener(v ->
+                startActivity(new Intent(SelectionActivity.this, MainActivity.class))
+        );
 
         btnEsp.setOnClickListener(v -> {
             // Placeholder for ESP Activity
