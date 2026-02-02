@@ -16,6 +16,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import data.AppDatabase;
+import data.User;
+import data.TestResult;
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etUsername, etPassword;
@@ -96,12 +100,16 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
+            AppDatabase db = AppDatabase.getDatabase(this);
+
             if (isLoginMode) {
-                String savedPass = userPrefs.getString("user_" + user, null);
-                if (savedPass != null && savedPass.equals(pass)) {
-                    SharedPreferences.Editor editor = userPrefs.edit();
-                    editor.putString("currentUser", user);
-                    editor.apply();
+                // Wir suchen den User in DEINER Datenbank
+                User userInDb = db.testDao().getUserByName(user);
+
+                if (userInDb != null && userInDb.password.equals(pass)) {
+                    // Login erfolgreich: Wir merken uns die ID für die MainActivity
+                    userPrefs.edit().putInt("currentUserId", userInDb.id).apply();
+                    userPrefs.edit().putString("currentUser", user).apply(); // Für das UI
 
                     // Corrected: Start SelectionActivity after login
                     startActivity(new Intent(LoginActivity.this, SelectionActivity.class));
@@ -110,15 +118,17 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(this, R.string.login_failed, Toast.LENGTH_SHORT).show();
                 }
             } else {
-                if (userPrefs.contains("user_" + user)) {
+                // Registrierung: In DEINE Datenbank schreiben
+                if (db.testDao().getUserByName(user) != null) {
                     Toast.makeText(this, R.string.user_already_exists, Toast.LENGTH_SHORT).show();
                 } else {
-                    SharedPreferences.Editor editor = userPrefs.edit();
-                    editor.putString("user_" + user, pass);
-                    editor.apply();
+                    db.testDao().insertUser(new User(user, pass));
                     Toast.makeText(this, R.string.registration_success, Toast.LENGTH_SHORT).show();
-                    isLoginMode = false;
-                    tvSwitchMode.performClick();
+                    // Automatisch zum Login-Modus umschalten
+                    isLoginMode = true;
+                    tvTitle.setText(R.string.login_title);
+                    btnLogin.setText(R.string.login_button);
+                    tvSwitchMode.setText(R.string.go_to_register_text);
                 }
             }
         });

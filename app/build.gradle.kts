@@ -39,4 +39,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler) // Für Java zwingend!
+    implementation(libs.itext.core)
+    implementation(libs.mpandroidchart)
 }

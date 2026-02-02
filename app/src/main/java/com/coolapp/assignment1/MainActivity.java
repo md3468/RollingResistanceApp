@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -13,6 +15,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+
+import data.AppDatabase;
+import data.User;
+import data.TestResult;
+import utils.CalculationHelper;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -89,6 +97,42 @@ public class MainActivity extends AppCompatActivity {
             cbTubeless.setChecked(false);
             cbTempStable.setChecked(false);
             cbPressureChecked.setChecked(false);
+        });
+        Button btnSave = findViewById(R.id.btn_save_to_list);
+
+        btnSave.setOnClickListener(v -> {
+            try {
+                // Daten-Objekt erstellen
+                TestResult result = new TestResult();
+
+                // User-ID aus den Prefs holen (vom Login)
+                SharedPreferences userPrefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+                result.userId = userPrefs.getInt("currentUserId", -1);
+
+                // Werte aus den EditTexts ziehen
+                result.tireName = etTireName.getText().toString();
+                result.pressureBar = Double.parseDouble(etPressureBar.getText().toString());
+                result.temperatureC = Double.parseDouble(etTemperatureC.getText().toString());
+                result.speedKmh = Double.parseDouble(etSpeedKmh.getText().toString());
+                result.p0W = Double.parseDouble(etP0W.getText().toString());
+                result.pLoadedW = Double.parseDouble(etPloadedW.getText().toString());
+                result.massKg = Double.parseDouble(etMassOnTireKg.getText().toString());
+
+                // Checkboxen auslesen
+                result.isTubeless = cbTubeless.isChecked();
+                result.isTempStable = cbTempStable.isChecked();
+                result.isPressureChecked = cbPressureChecked.isChecked();
+
+                // Berechnung durchführen (Deine utils-Klasse)
+                utils.CalculationHelper.calculateAndFill(result);
+
+                // In Datenbank speichern
+                AppDatabase.getDatabase(this).testDao().insertResult(result);
+
+                Toast.makeText(this, "Saved successfully! Crr: " + String.format("%.5f", result.calculatedCrr), Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                Toast.makeText(this, "Error: Please check if all numeric fields are filled!", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }
