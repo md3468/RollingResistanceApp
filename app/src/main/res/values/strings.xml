@@ -13,14 +13,23 @@
     <string name="login_failed">Login failed</string>
     <string name="registration_success">Registration successful</string>
     <string name="user_already_exists">User already exists</string>
+    <string name="fill_all_fields">Please fill all fields</string>
+
+    <!-- Selection Screen -->
+    <string name="selection_title">Choose Input Method</string>
+    <string name="manual_input_button">Manual Input</string>
+    <string name="esp_input_button">ESP (Bluetooth) Input</string>
+
+    <!-- ESP Screen -->
+    <string name="esp_title">ESP Connection</string>
+    <string name="connect_esp_button">Connect to ESP</string>
+    <string name="available_devices">Available Devices:</string>
+    <string name="no_devices_found">No devices found</string>
 
     <!-- First Page -->
     <!-- Headline -->
     <string name="rolling_resistance_test">Rolling Resistance Test</string>
     <string name="crr_testbench_subtitle">A simple test bench for bicycle tire rolling resistance</string>
-
-    <!-- Switch mode
-    <string name="switch_mode">Mode</string> -->
 
     <!-- Graphic -->
     <string name="placeholder_graphic">Placeholder graphic</string>
@@ -43,7 +52,4 @@
     <string name="clear_input">Clear all</string>
     <string name="go_to_list">Go to List</string>
     <string name="save_to_list">Save</string>
-
-    <!-- Second Page
-    <string name="back">Back</string>-->
 </resources>

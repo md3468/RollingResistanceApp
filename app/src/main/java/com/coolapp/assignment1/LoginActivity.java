@@ -29,23 +29,22 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. Edge-to-Edge aktivieren (wie in MainActivity)
+        // 1. Enable Edge-to-Edge
         EdgeToEdge.enable(this);
 
         userPrefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         themePrefs = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
 
-        // Keine automatische Anmeldung mehr
         setContentView(R.layout.activity_login);
 
-        // 2. WindowInsetsListener hinzufügen (identisch zu MainActivity)
+        // 2. Add WindowInsetsListener
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(v.getPaddingLeft(), systemBars.top, v.getPaddingRight(), systemBars.bottom);
             return insets;
         });
 
-        // Dark Mode Logik
+        // Dark Mode Logic
         SwitchMaterial darkModeSwitch = findViewById(R.id.switch_mode);
         boolean isDarkModeOn = themePrefs.getBoolean("isDarkModeOn", false);
 
@@ -93,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
             String pass = etPassword.getText().toString().trim();
 
             if (user.isEmpty() || pass.isEmpty()) {
-                Toast.makeText(this, "Bitte alle Felder ausfüllen", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.fill_all_fields, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -104,7 +103,8 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("currentUser", user);
                     editor.apply();
 
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    // Corrected: Start SelectionActivity after login
+                    startActivity(new Intent(LoginActivity.this, SelectionActivity.class));
                     finish();
                 } else {
                     Toast.makeText(this, R.string.login_failed, Toast.LENGTH_SHORT).show();
