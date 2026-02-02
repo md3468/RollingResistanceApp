@@ -1,6 +1,19 @@
 <resources>
     <string name="app_name">RollingResistanceApp</string>
 
+    <!-- Login/Register -->
+    <string name="login_title">Login</string>
+    <string name="register_title">Register</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button">Login</string>
+    <string name="register_button">Register</string>
+    <string name="go_to_register_text">No account yet? Register here</string>
+    <string name="go_to_login_text">Already have an account? Login here</string>
+    <string name="login_failed">Login failed</string>
+    <string name="registration_success">Registration successful</string>
+    <string name="user_already_exists">User already exists</string>
+
     <!-- First Page -->
     <!-- Headline -->
     <string name="rolling_resistance_test">Rolling Resistance Test</string>
