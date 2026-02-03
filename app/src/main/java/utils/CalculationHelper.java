@@ -3,29 +3,24 @@ package utils;
 import data.TestResult;
 
 public class CalculationHelper {
-    // Constant values for the test rig
     private static final double G = 9.81;
-    private static final double LEVER_HANG = 0.875; // meters
-    private static final double LEVER_TIRE = 0.358; // meters
+    private static final double LEVER_HANG = 0.875;
+    private static final double LEVER_TIRE = 0.358;
 
-    /**
-     * Calculates Crr and updates the TestResult object.
-     */
-    public static void calculateAndFill(TestResult res) {
-        // 1. Convert lever mass to effective mass on tire
+    public static void processAndCalculate(TestResult res) {
+        // Schritt 1: Falls ESP-Daten genutzt werden, Leistung berechnen
+        if (!res.isManualInput) {
+            res.p0W = res.voltageSystem * res.idleCurrentAmp;
+            res.pLoadedW = res.voltageSystem * res.loadCurrentAmp;
+        }
+
+        // Schritt 2: Crr Physik-Logik
         double effectiveMassOnTire = (res.massKg * LEVER_HANG) / LEVER_TIRE;
-
-        // 2. Convert speed from km/h to m/s
         double speedMs = res.speedKmh / 3.6;
-
-        // 3. Power loss (Prr) = P_loaded - P_idle
         double powerLossRR = res.pLoadedW - res.p0W;
 
-        // 4. Crr Calculation: Prr / (m_eff * g * v)
         if (effectiveMassOnTire > 0 && speedMs > 0) {
             res.calculatedCrr = powerLossRR / (effectiveMassOnTire * G * speedMs);
-        } else {
-            res.calculatedCrr = 0.0;
         }
     }
 }
