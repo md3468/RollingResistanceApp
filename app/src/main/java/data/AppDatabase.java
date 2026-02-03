@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 @Database(entities = {User.class, TestResult.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract TestDao testDao();
-    private static AppDatabase INSTANCE;
+    private static volatile AppDatabase INSTANCE;
 
     public static AppDatabase getDatabase(Context context) {
         if (INSTANCE == null) {

@@ -18,7 +18,6 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import data.AppDatabase;
 import data.User;
-import data.TestResult;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -33,7 +32,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. Enable Edge-to-Edge
         EdgeToEdge.enable(this);
 
         userPrefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
@@ -41,35 +39,24 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
-        // 2. Add WindowInsetsListener
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(v.getPaddingLeft(), systemBars.top, v.getPaddingRight(), systemBars.bottom);
             return insets;
         });
 
-        // Dark Mode Logic
         SwitchMaterial darkModeSwitch = findViewById(R.id.switch_mode);
         boolean isDarkModeOn = themePrefs.getBoolean("isDarkModeOn", false);
-
-        if (isDarkModeOn) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            darkModeSwitch.setChecked(true);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            darkModeSwitch.setChecked(false);
-        }
+        darkModeSwitch.setChecked(isDarkModeOn);
 
         darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = themePrefs.edit();
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                editor.putBoolean("isDarkModeOn", true);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                editor.putBoolean("isDarkModeOn", false);
-            }
-            editor.apply();
+            themePrefs.edit().putBoolean("isDarkModeOn", isChecked).apply();
+
+            AppCompatDelegate.setDefaultNightMode(
+                    isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+            );
+
+            recreate();
         });
 
         etUsername = findViewById(R.id.et_username);
@@ -103,28 +90,23 @@ public class LoginActivity extends AppCompatActivity {
             AppDatabase db = AppDatabase.getDatabase(this);
 
             if (isLoginMode) {
-                // Wir suchen den User in DEINER Datenbank
                 User userInDb = db.testDao().getUserByName(user);
 
                 if (userInDb != null && userInDb.password.equals(pass)) {
-                    // Login erfolgreich: Wir merken uns die ID für die MainActivity
                     userPrefs.edit().putInt("currentUserId", userInDb.id).apply();
-                    userPrefs.edit().putString("currentUser", user).apply(); // Für das UI
+                    userPrefs.edit().putString("currentUser", user).apply();
 
-                    // Corrected: Start SelectionActivity after login
                     startActivity(new Intent(LoginActivity.this, SelectionActivity.class));
                     finish();
                 } else {
                     Toast.makeText(this, R.string.login_failed, Toast.LENGTH_SHORT).show();
                 }
             } else {
-                // Registrierung: In DEINE Datenbank schreiben
                 if (db.testDao().getUserByName(user) != null) {
                     Toast.makeText(this, R.string.user_already_exists, Toast.LENGTH_SHORT).show();
                 } else {
                     db.testDao().insertUser(new User(user, pass));
                     Toast.makeText(this, R.string.registration_success, Toast.LENGTH_SHORT).show();
-                    // Automatisch zum Login-Modus umschalten
                     isLoginMode = true;
                     tvTitle.setText(R.string.login_title);
                     btnLogin.setText(R.string.login_button);

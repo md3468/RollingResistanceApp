@@ -25,6 +25,7 @@
     <string name="connect_esp_button">Connect to ESP</string>
     <string name="available_devices">Available Devices:</string>
     <string name="no_devices_found">No devices found</string>
+    <string name="back_button">Back</string>
 
     <!-- First Page -->
     <!-- Headline -->

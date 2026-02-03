@@ -1,5 +1,6 @@
 package com.coolapp.assignment1;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,61 +15,49 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import data.AppDatabase;
-import data.User;
 import data.TestResult;
-import utils.CalculationHelper;
-
 
 public class MainActivity extends AppCompatActivity {
 
+    @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. Edge-to-Edge reactivities
         EdgeToEdge.enable(this);
-
         setContentView(R.layout.activity_main);
 
-        // 2. Listener für WindowInsets hinzufügen, um Padding anzupassen
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            // Das Padding des Views anpassen, um die Systemleisten zu berücksichtigen
             v.setPadding(v.getPaddingLeft(), systemBars.top, v.getPaddingRight(), systemBars.bottom);
             return insets;
         });
 
+        SharedPreferences themePrefs = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
+
         SwitchMaterial darkModeSwitch = findViewById(R.id.switch_mode);
+        boolean isDarkModeOn = themePrefs.getBoolean("isDarkModeOn", false);
+        darkModeSwitch.setChecked(isDarkModeOn);
 
-        // Lade die gespeicherte Einstellung
-        SharedPreferences sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
-        boolean isDarkModeOn = sharedPreferences.getBoolean("isDarkModeOn", false);
-
-        // Setze den richtigen Modus beim Start
-        if (isDarkModeOn) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            darkModeSwitch.setChecked(true);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            darkModeSwitch.setChecked(false);
-        }
-
+        // STABILISIERTE DARK MODE LOGIK
         darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                editor.putBoolean("isDarkModeOn", true);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                editor.putBoolean("isDarkModeOn", false);
+            // 1. Speichern
+            themePrefs.edit().putBoolean("isDarkModeOn", isChecked).apply();
+
+            // 2. Ziel-Modus festlegen
+            int targetMode = isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
+
+            // 3. Sicherheitsabfrage: Nur neustarten, wenn der Modus ungleich dem aktuellen ist
+            if (AppCompatDelegate.getDefaultNightMode() != targetMode) {
+                AppCompatDelegate.setDefaultNightMode(targetMode);
+                recreate();
             }
-            editor.apply();
         });
 
-        // Find views
         EditText etTireName = findViewById(R.id.et_tire_name);
         EditText etPressureBar = findViewById(R.id.et_pressure_bar);
         EditText etTemperatureC = findViewById(R.id.et_temperature_c);
@@ -84,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         Button btnClearInput = findViewById(R.id.btn_clear_input);
 
         btnClearInput.setOnClickListener(v -> {
-            // Clear EditTexts
             etTireName.setText("");
             etPressureBar.setText("");
             etTemperatureC.setText("");
@@ -93,23 +81,20 @@ public class MainActivity extends AppCompatActivity {
             etPloadedW.setText("");
             etMassOnTireKg.setText("");
 
-            // Uncheck CheckBoxes
             cbTubeless.setChecked(false);
             cbTempStable.setChecked(false);
             cbPressureChecked.setChecked(false);
         });
+
         Button btnSave = findViewById(R.id.btn_save_to_list);
 
         btnSave.setOnClickListener(v -> {
             try {
-                // Daten-Objekt erstellen
                 TestResult result = new TestResult();
 
-                // User-ID aus den Prefs holen (vom Login)
                 SharedPreferences userPrefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
                 result.userId = userPrefs.getInt("currentUserId", -1);
 
-                // Werte aus den EditTexts ziehen
                 result.tireName = etTireName.getText().toString();
                 result.pressureBar = Double.parseDouble(etPressureBar.getText().toString());
                 result.temperatureC = Double.parseDouble(etTemperatureC.getText().toString());
@@ -118,15 +103,12 @@ public class MainActivity extends AppCompatActivity {
                 result.pLoadedW = Double.parseDouble(etPloadedW.getText().toString());
                 result.massKg = Double.parseDouble(etMassOnTireKg.getText().toString());
 
-                // Checkboxen auslesen
                 result.isTubeless = cbTubeless.isChecked();
                 result.isTempStable = cbTempStable.isChecked();
                 result.isPressureChecked = cbPressureChecked.isChecked();
 
-                // Berechnung durchführen (Deine utils-Klasse)
                 utils.CalculationHelper.calculateAndFill(result);
 
-                // In Datenbank speichern
                 AppDatabase.getDatabase(this).testDao().insertResult(result);
 
                 Toast.makeText(this, "Saved successfully! Crr: " + String.format("%.5f", result.calculatedCrr), Toast.LENGTH_LONG).show();
