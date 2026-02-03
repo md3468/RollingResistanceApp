@@ -53,4 +53,5 @@
     <string name="clear_input">Clear all</string>
     <string name="go_to_list">Go to List</string>
     <string name="save_to_list">Save</string>
+    <string name="proceed_to_measurements">Proceed to Measurements</string>
 </resources>

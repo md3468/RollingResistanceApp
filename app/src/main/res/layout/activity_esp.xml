@@ -77,7 +77,7 @@
         android:id="@+id/btn_proceed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Proceed to Measurements"
+        android:text="@string/proceed_to_measurements"
         android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
