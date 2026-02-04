@@ -23,4 +23,8 @@ public class CalculationHelper {
             res.calculatedCrr = powerLossRR / (effectiveMassOnTire * G * speedMs);
         }
     }
+
+    public static void calculateAndFill(TestResult result) {
+
+    }
 }
