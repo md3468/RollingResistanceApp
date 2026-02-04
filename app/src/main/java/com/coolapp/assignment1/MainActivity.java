@@ -108,6 +108,13 @@ public class MainActivity extends AppCompatActivity {
             cbTempStable.setChecked(false);
             cbPressureChecked.setChecked(false);
         });
+
+        Button btnGoToList = findViewById(R.id.btn_go_to_list);
+        btnGoToList.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ListActivity.class);
+            startActivity(intent);
+        });
+
         Button btnSave = findViewById(R.id.btn_save_to_list);
 
         btnSave.setOnClickListener(v -> {

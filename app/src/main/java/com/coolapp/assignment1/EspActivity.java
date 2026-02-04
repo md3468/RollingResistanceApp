@@ -11,8 +11,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -90,7 +92,7 @@ public class EspActivity extends AppCompatActivity {
             }
         });
 
-        Button btnBack = findViewById(R.id.btn_back);
+        ImageButton btnBack = findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> {
             startActivity(new Intent(this, SelectionActivity.class));
             finish();

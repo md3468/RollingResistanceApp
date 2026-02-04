@@ -7,18 +7,17 @@
     android:padding="16dp"
     android:background="@color/activity_background">
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_back"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/back_button"
-        android:minWidth="0dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/back_button"
+        android:src="@android:drawable/ic_menu_revert"
         app:layout_constraintBottom_toBottomOf="@id/switch_mode"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/switch_mode" />
+        app:layout_constraintTop_toTopOf="@id/switch_mode"
+        app:tint="@color/back_button_tint" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switch_mode"

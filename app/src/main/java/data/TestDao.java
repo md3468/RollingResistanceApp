@@ -1,6 +1,7 @@
 package data;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import java.util.List;
@@ -13,6 +14,8 @@ public interface TestDao {
     User getUserByName(String name);
     @Insert
     void insertResult(TestResult result);
+    @Delete
+    void deleteResult(TestResult result);
     @Query("SELECT * FROM test_results WHERE userId = :uId ORDER BY timestamp DESC")
     List<TestResult> getResultsForUser(int uId);
     @Query("SELECT DISTINCT tireName FROM test_results WHERE userId = :uId")
