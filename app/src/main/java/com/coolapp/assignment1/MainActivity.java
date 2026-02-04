@@ -2,11 +2,13 @@ package com.coolapp.assignment1;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,9 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import data.AppDatabase;
-import data.User;
 import data.TestResult;
-import utils.CalculationHelper;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -41,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
             // Das Padding des Views anpassen, um die Systemleisten zu berücksichtigen
             v.setPadding(v.getPaddingLeft(), systemBars.top, v.getPaddingRight(), systemBars.bottom);
             return insets;
+        });
+
+        // Back Button Logic
+        ImageButton btnBack = findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SelectionActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         SwitchMaterial darkModeSwitch = findViewById(R.id.switch_mode);

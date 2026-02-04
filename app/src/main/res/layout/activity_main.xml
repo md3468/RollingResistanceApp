@@ -10,28 +10,44 @@
     android:background="@color/activity_background"
     tools:context="com.coolapp.assignment1.MainActivity">
 
+    <!-- Back Button -->
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/go_to_list"
+        android:src="@android:drawable/ic_menu_revert"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/back_button_tint" />
+
     <!-- Header -->
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="48dp"
+        android:gravity="center"
         android:text="@string/rolling_resistance_test"
         android:textColor="@color/text_primary"
         android:textSize="22sp"
         android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toBottomOf="@id/btn_back"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/btn_back" />
 
     <TextView
         android:id="@+id/tv_subtitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:gravity="center"
         android:text="@string/crr_testbench_subtitle"
         android:textColor="@color/text_secondary"
         android:textSize="12sp"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
@@ -40,171 +56,179 @@
         android:id="@+id/switch_mode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/tv_title"
+        app:layout_constraintBottom_toBottomOf="@id/btn_back"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_title"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@id/btn_back" />
 
-    <!-- Graph Placeholder -->
-    <FrameLayout
-        android:id="@+id/fl_graph"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
-        android:layout_height="160dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/placeholder_graphic"
-        app:layout_constraintTop_toBottomOf="@id/tv_subtitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView
-            android:id="@+id/iv_graph"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/placeholder_graphic"
-            android:scaleType="centerCrop"
-            android:src="@drawable/graph_preview"
-            tools:ignore="ImageContrastCheck" />
-    </FrameLayout>
-
-    <!-- Test Parameters -->
-    <LinearLayout
-        android:id="@+id/ll_params"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/ll_actions"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fl_graph">
+        app:layout_constraintTop_toBottomOf="@id/tv_subtitle">
 
-        <!-- Tire name -->
-        <EditText
-            android:id="@+id/et_tire_name"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="name"
-            android:hint="@string/tire_example_28_inch"
-            android:inputType="text"
-            android:paddingBottom="15dp"
-            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+            android:layout_height="wrap_content">
 
-        <!-- Tire pressure -->
-        <EditText
-            android:id="@+id/et_pressure_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:autofillHints="pressure"
-            android:hint="@string/tire_pressure_bar"
-            android:inputType="numberDecimal"
-            android:paddingBottom="15dp"
-            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+            <!-- Graph Placeholder -->
+            <FrameLayout
+                android:id="@+id/fl_graph"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:background="@color/placeholder_graphic"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Tire temperature -->
-        <EditText
-            android:id="@+id/et_temperature_c"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:autofillHints="temperature"
-            android:hint="@string/temperature_celsius"
-            android:inputType="numberDecimal"
-            android:paddingBottom="15dp"
-            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                <ImageView
+                    android:id="@+id/iv_graph"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/placeholder_graphic"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/graph_preview"
+                    tools:ignore="ImageContrastCheck" />
+            </FrameLayout>
 
-        <!-- Speed (App should converts to [m/s] later when Table is made on the second screen) -->
-        <EditText
-            android:id="@+id/et_speed_kmh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:autofillHints="speed"
-            android:hint="@string/speed_kmh"
-            android:inputType="numberDecimal"
-            android:paddingBottom="15dp"
-            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+            <!-- Test Parameters -->
+            <LinearLayout
+                android:id="@+id/ll_params"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fl_graph">
 
-        <!-- P_0 -->
-        <EditText
-            android:id="@+id/et_p0_w"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:autofillHints="idlePower"
-            android:hint="@string/idle_power_p0_w"
-            android:inputType="numberDecimal"
-            android:paddingBottom="15dp"
-            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                <EditText
+                    android:id="@+id/et_tire_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="name"
+                    android:hint="@string/tire_example_28_inch"
+                    android:inputType="text"
+                    android:paddingBottom="15dp"
+                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
-        <!-- P_loaded -->
-        <EditText
-            android:id="@+id/et_ploaded_w"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:autofillHints="loadedPower"
-            android:hint="@string/loaded_power_ploaded_w"
-            android:inputType="numberDecimal"
-            android:paddingBottom="15dp"
-            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                <EditText
+                    android:id="@+id/et_pressure_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:autofillHints="pressure"
+                    android:hint="@string/tire_pressure_bar"
+                    android:inputType="numberDecimal"
+                    android:paddingBottom="15dp"
+                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
-        <!-- Mass on tire -->
-        <EditText
-            android:id="@+id/et_mass_on_tire_kg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:autofillHints="mass"
-            android:hint="@string/mass_on_tire_m_kg"
-            android:inputType="numberDecimal"
-            android:paddingBottom="15dp"
-            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/et_temperature_c"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:autofillHints="temperature"
+                    android:hint="@string/temperature_celsius"
+                    android:inputType="numberDecimal"
+                    android:paddingBottom="15dp"
+                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
-    <!-- Checkboxes -->
-    <LinearLayout
-        android:id="@+id/ll_switches"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/ll_params"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="VisualLintBounds">
+                <EditText
+                    android:id="@+id/et_speed_kmh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:autofillHints="speed"
+                    android:hint="@string/speed_kmh"
+                    android:inputType="numberDecimal"
+                    android:paddingBottom="15dp"
+                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
-        <CheckBox
-            android:id="@+id/cb_tubeless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tire_tubeless" />
+                <EditText
+                    android:id="@+id/et_p0_w"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:autofillHints="idlePower"
+                    android:hint="@string/idle_power_p0_w"
+                    android:inputType="numberDecimal"
+                    android:paddingBottom="15dp"
+                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
-        <CheckBox
-            android:id="@+id/cb_temp_stable"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/temperature_stable" />
+                <EditText
+                    android:id="@+id/et_ploaded_w"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:autofillHints="loadedPower"
+                    android:hint="@string/loaded_power_ploaded_w"
+                    android:inputType="numberDecimal"
+                    android:paddingBottom="15dp"
+                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
-        <CheckBox
-            android:id="@+id/cb_pressure_checked"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tire_pressure_checked_later" />
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/et_mass_on_tire_kg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:autofillHints="mass"
+                    android:hint="@string/mass_on_tire_m_kg"
+                    android:inputType="numberDecimal"
+                    android:paddingBottom="15dp"
+                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+            </LinearLayout>
 
-    <!-- Actions/Buttons -->
+            <!-- Checkboxes -->
+            <LinearLayout
+                android:id="@+id/ll_switches"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:paddingBottom="16dp"
+                app:layout_constraintTop_toBottomOf="@id/ll_params"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <CheckBox
+                    android:id="@+id/cb_tubeless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tire_tubeless" />
+
+                <CheckBox
+                    android:id="@+id/cb_temp_stable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/temperature_stable" />
+
+                <CheckBox
+                    android:id="@+id/cb_pressure_checked"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tire_pressure_checked_later" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Actions/Buttons - Fixed at bottom -->
     <LinearLayout
         android:id="@+id/ll_actions"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/ll_switches"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="ButtonStyle,VisualLintBounds">
+        tools:ignore="ButtonStyle">
 
         <Button
             android:id="@+id/btn_clear_input"
@@ -213,8 +237,7 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@string/clear_input"
-            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
+            android:text="@string/clear_input" />
 
         <Button
             android:id="@+id/btn_go_to_list"
@@ -224,8 +247,7 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@string/go_to_list"
-            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
+            android:text="@string/go_to_list" />
 
         <Button
             android:id="@+id/btn_save_to_list"
@@ -235,7 +257,6 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@string/save_to_list"
-            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
+            android:text="@string/save_to_list" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

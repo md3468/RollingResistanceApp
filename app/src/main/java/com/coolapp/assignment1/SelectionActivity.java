@@ -19,6 +19,7 @@ import android.widget.Button;
 public class SelectionActivity extends AppCompatActivity {
 
     private SharedPreferences themePrefs;
+    private SharedPreferences userPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class SelectionActivity extends AppCompatActivity {
         });
 
         themePrefs = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
+        userPrefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
 
         SwitchMaterial darkModeSwitch = findViewById(R.id.switch_mode);
         boolean isDarkModeOn = themePrefs.getBoolean("isDarkModeOn", false);
@@ -53,6 +55,14 @@ public class SelectionActivity extends AppCompatActivity {
 
         Button btnManual = findViewById(R.id.btn_manual_input);
         Button btnEsp = findViewById(R.id.btn_esp_input);
+        Button btnLogout = findViewById(R.id.btn_logout);
+
+        // Sign Out Logik
+        btnLogout.setOnClickListener(v -> {
+            userPrefs.edit().clear().apply();
+            startActivity(new Intent(SelectionActivity.this, LoginActivity.class));
+            finish();
+        });
 
         // Wechsel zu Manual Input
         btnManual.setOnClickListener(v -> {

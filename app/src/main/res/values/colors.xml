@@ -17,4 +17,7 @@
 
     <!-- Placeholder Graphic -->
     <color name="placeholder_graphic">#EEEEEE</color>
+
+    <!-- UI Elements -->
+    <color name="back_button_tint">#FF000000</color>
 </resources>

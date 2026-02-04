@@ -14,6 +14,7 @@
     <string name="registration_success">Registration successful</string>
     <string name="user_already_exists">User already exists</string>
     <string name="fill_all_fields">Please fill all fields</string>
+    <string name="logout_button">Sign Out</string>
 
     <!-- Selection Screen -->
     <string name="selection_title">Choose Input Method</string>

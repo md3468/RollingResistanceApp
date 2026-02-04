@@ -7,6 +7,15 @@
     android:padding="16dp"
     android:background="@color/activity_background">
 
+    <Button
+        android:id="@+id/btn_logout"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/logout_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switch_mode"
         android:layout_width="wrap_content"

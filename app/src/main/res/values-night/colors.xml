@@ -5,4 +5,7 @@
     <!-- Textfarben -->
     <color name="text_primary">#FFFFFFFF</color>        <!-- weiss -->
     <color name="text_secondary">#9CA3AF</color>      <!-- helleres Grau -->
+
+    <!-- UI Elements -->
+    <color name="back_button_tint">#3B82F6</color>
 </resources>
