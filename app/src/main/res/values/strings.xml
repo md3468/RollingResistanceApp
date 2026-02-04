@@ -37,7 +37,16 @@
     <string name="placeholder_graphic">Placeholder graphic</string>
 
     <!-- Text field -->
-    <string name="tire_example_28_inch">Tire model (e.g., 28-inch gravel tire)</string>
+    <string name="tire_example_etrto">Tire size ETRTO (e.g. 40 622 19C)</string>
+    <string name="etrto_info_title">ETRTO Information</string>
+    <string name="etrto_info_text"><![CDATA[The ETRTO size defines the exact tire and rim geometry.<br><br>
+            Example: 40 622 19C<br>
+            • 40 tire width in mm<br>
+            • 622 rim diameter in mm<br>
+            • 19C rim inner width in mm<br>
+            • Read these numbers directly from the tire sidewall and rim<br><br>
+            More info <a href="https://www.taylor-wheels.de/blog/mit-etrto-die-reifengroesse-fuer-das-fahrrad-bestimmen/?srsltid=AfmBOop2AcMjX1V-CMhO7HzU1SKUokSLCDlrTVusVtbsU3XCisSrt-I3">here</a>.]]></string>
+    
     <string name="tire_pressure_bar">Tire pressure [bar]</string>
     <string name="temperature_celsius">Temperature [°C]</string>
     <string name="speed_kmh">Speed v [km/h]</string>

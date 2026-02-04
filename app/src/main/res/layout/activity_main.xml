@@ -112,7 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints="name"
-                    android:hint="@string/tire_example_28_inch"
+                    android:hint="@string/tire_example_etrto"
                     android:inputType="text"
                     android:paddingBottom="15dp"
                     tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />

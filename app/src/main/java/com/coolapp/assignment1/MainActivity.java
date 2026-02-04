@@ -5,13 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
@@ -86,6 +90,23 @@ public class MainActivity extends AppCompatActivity {
         EditText etP0W = findViewById(R.id.et_p0_w);
         EditText etPloadedW = findViewById(R.id.et_ploaded_w);
         EditText etMassOnTireKg = findViewById(R.id.et_mass_on_tire_kg);
+
+        // Info-Popup für ETRTO mit klickbarem Link
+        etTireName.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setTitle(R.string.etrto_info_title)
+                        .setMessage(Html.fromHtml(getString(R.string.etrto_info_text), Html.FROM_HTML_MODE_LEGACY))
+                        .setPositiveButton("OK", (d, which) -> d.dismiss())
+                        .show();
+                
+                // Macht den Link klickbar
+                TextView messageView = dialog.findViewById(android.R.id.message);
+                if (messageView != null) {
+                    messageView.setMovementMethod(LinkMovementMethod.getInstance());
+                }
+            }
+        });
 
         CheckBox cbTubeless = findViewById(R.id.cb_tubeless);
         CheckBox cbTempStable = findViewById(R.id.cb_temp_stable);
