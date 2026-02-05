@@ -117,6 +117,51 @@
                     android:paddingBottom="15dp"
                     tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
+                <!-- to calculate the mass applied on the tire -->
+                <EditText
+                    android:id="@+id/et_mass_on_lever_arm_kg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:autofillHints="mass"
+                    android:hint="@string/mass_on_lever_arm_kg"
+                    android:inputType="numberDecimal"
+                    android:paddingBottom="15dp"
+                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+                <EditText
+                    android:id="@+id/et_motor_speed_rpm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:autofillHints="speed"
+                    android:hint="@string/motor_speed_rpm"
+                    android:inputType="numberDecimal"
+                    android:paddingBottom="15dp"
+                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+                <EditText
+                    android:id="@+id/et_I0_A"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:autofillHints="idlePower"
+                    android:hint="@string/idle_power_I0_A"
+                    android:inputType="numberDecimal"
+                    android:paddingBottom="15dp"
+                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+                <EditText
+                    android:id="@+id/et_Iloaded_A"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:autofillHints="loadedPower"
+                    android:hint="@string/loaded_power_Iloaded_A"
+                    android:inputType="numberDecimal"
+                    android:paddingBottom="15dp"
+                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
                 <EditText
                     android:id="@+id/et_pressure_bar"
                     android:layout_width="match_parent"
@@ -138,53 +183,9 @@
                     android:inputType="numberDecimal"
                     android:paddingBottom="15dp"
                     tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
-
-                <EditText
-                    android:id="@+id/et_speed_kmh"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:autofillHints="speed"
-                    android:hint="@string/speed_kmh"
-                    android:inputType="numberDecimal"
-                    android:paddingBottom="15dp"
-                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
-
-                <EditText
-                    android:id="@+id/et_p0_w"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:autofillHints="idlePower"
-                    android:hint="@string/idle_power_p0_w"
-                    android:inputType="numberDecimal"
-                    android:paddingBottom="15dp"
-                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
-
-                <EditText
-                    android:id="@+id/et_ploaded_w"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:autofillHints="loadedPower"
-                    android:hint="@string/loaded_power_ploaded_w"
-                    android:inputType="numberDecimal"
-                    android:paddingBottom="15dp"
-                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
-
-                <EditText
-                    android:id="@+id/et_mass_on_tire_kg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:autofillHints="mass"
-                    android:hint="@string/mass_on_tire_m_kg"
-                    android:inputType="numberDecimal"
-                    android:paddingBottom="15dp"
-                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
             </LinearLayout>
 
-            <!-- Checkboxes -->
+        <!-- Checkboxes -->
             <LinearLayout
                 android:id="@+id/ll_switches"
                 android:layout_width="0dp"

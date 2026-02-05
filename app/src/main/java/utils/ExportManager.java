@@ -29,8 +29,8 @@ public class ExportManager {
                         .append(String.valueOf(res.pressureBar)).append(";")
                         .append(String.valueOf(res.speedKmh)).append(";")
                         .append(res.isManualInput ? "Manual" : "ESP").append(";")
-                        .append(String.valueOf(res.p0W)).append(";")
-                        .append(String.valueOf(res.pLoadedW)).append(";")
+                        .append(String.valueOf(res.I0A)).append(";")
+                        .append(String.valueOf(res.ILoadedA)).append(";")
                         .append(String.format("%.6f", res.calculatedCrr)).append("\n");
             }
             return file;
@@ -63,7 +63,7 @@ public class ExportManager {
                 for (TestResult res : groupedData.get(tire)) {
                     table.addCell(String.valueOf(res.pressureBar));
                     table.addCell(String.valueOf(res.speedKmh));
-                    table.addCell(String.format("%.2f", res.pLoadedW - res.p0W));
+                    table.addCell(String.format("%.2f", res.ILoadedA - res.I0A));
                     table.addCell(String.format("%.6f", res.calculatedCrr));
                 }
                 document.add(table);

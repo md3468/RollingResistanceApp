@@ -16,14 +16,16 @@ public class TestResult {
     public double voltageSystem;
     public double idleCurrentAmp;
     public double loadCurrentAmp;
-    public double p0W;
-    public double pLoadedW;
+    public double I0A;
+    public double ILoadedA;
     public boolean isTubeless;
     public boolean isTempStable;
     public boolean isPressureChecked;
     public boolean isManualInput;
     public double calculatedCrr;
     public long timestamp;
+    public double etSpeedrpm;
+
     public TestResult() {
         this.timestamp = System.currentTimeMillis();
     }

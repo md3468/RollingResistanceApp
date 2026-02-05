@@ -86,10 +86,10 @@ public class MainActivity extends AppCompatActivity {
         EditText etTireName = findViewById(R.id.et_tire_name);
         EditText etPressureBar = findViewById(R.id.et_pressure_bar);
         EditText etTemperatureC = findViewById(R.id.et_temperature_c);
-        EditText etSpeedKmh = findViewById(R.id.et_speed_kmh);
-        EditText etP0W = findViewById(R.id.et_p0_w);
-        EditText etPloadedW = findViewById(R.id.et_ploaded_w);
-        EditText etMassOnTireKg = findViewById(R.id.et_mass_on_tire_kg);
+        EditText etSpeedrpm = findViewById(R.id.et_motor_speed_rpm);
+        EditText etI0A = findViewById(R.id.et_I0_A);
+        EditText etIloadedA = findViewById(R.id.et_Iloaded_A);
+        EditText etMassOnleverarmKg = findViewById(R.id.et_mass_on_lever_arm_kg);
 
         // Info-Popup für ETRTO mit klickbarem Link
         etTireName.setOnFocusChangeListener((v, hasFocus) -> {
@@ -119,10 +119,10 @@ public class MainActivity extends AppCompatActivity {
             etTireName.setText("");
             etPressureBar.setText("");
             etTemperatureC.setText("");
-            etSpeedKmh.setText("");
-            etP0W.setText("");
-            etPloadedW.setText("");
-            etMassOnTireKg.setText("");
+            etSpeedrpm.setText("");
+            etI0A.setText("");
+            etIloadedA.setText("");
+            etMassOnleverarmKg.setText("");
 
             // Uncheck CheckBoxes
             cbTubeless.setChecked(false);
@@ -151,10 +151,10 @@ public class MainActivity extends AppCompatActivity {
                 result.tireName = etTireName.getText().toString();
                 result.pressureBar = Double.parseDouble(etPressureBar.getText().toString());
                 result.temperatureC = Double.parseDouble(etTemperatureC.getText().toString());
-                result.speedKmh = Double.parseDouble(etSpeedKmh.getText().toString());
-                result.p0W = Double.parseDouble(etP0W.getText().toString());
-                result.pLoadedW = Double.parseDouble(etPloadedW.getText().toString());
-                result.massKg = Double.parseDouble(etMassOnTireKg.getText().toString());
+                result.etSpeedrpm = Double.parseDouble(etSpeedrpm.getText().toString());
+                result.I0A = Double.parseDouble(etI0A.getText().toString());
+                result.ILoadedA = Double.parseDouble(etIloadedA.getText().toString());
+                result.massKg = Double.parseDouble(etMassOnleverarmKg.getText().toString());
 
                 // Checkboxen auslesen
                 result.isTubeless = cbTubeless.isChecked();
