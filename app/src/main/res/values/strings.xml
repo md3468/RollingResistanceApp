@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">RollingResistanceApp</string>
 
     <!-- Login/Register -->
@@ -39,7 +39,7 @@
     <!-- Text field -->
     <string name="tire_example_etrto">Tire name / size in ETRTO (e.g. 40 622 19)</string>
     <string name="etrto_info_title">ETRTO Information</string>
-    <string name="etrto_info_text"><![CDATA[The ETRTO size defines the exact tire and rim geometry.<br><br>
+    <string name="etrto_info_text" tools:ignore="Typos"><![CDATA[The ETRTO size defines the exact tire and rim geometry.<br><br>
             Example: 40 622 19<br>
             • 40  - tire width in mm<br>
             • 622 - rim diameter in mm<br>
@@ -65,4 +65,7 @@
     <string name="save_to_list">Save</string>
     <string name="proceed_to_measurements">Proceed to Measurements</string>
     <string name="export_pdf">Export PDF</string>
+    <string name="list">List</string>
+    <string name="back">Back</string>
+    <string name="delete">Delete</string>
 </resources>

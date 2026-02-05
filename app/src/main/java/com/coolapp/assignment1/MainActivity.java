@@ -25,6 +25,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import data.AppDatabase;
 import data.TestResult;
+import utils.CalculationHelper;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -152,8 +153,11 @@ public class MainActivity extends AppCompatActivity {
                 result.pressureBar = Double.parseDouble(etPressureBar.getText().toString());
                 result.temperatureC = Double.parseDouble(etTemperatureC.getText().toString());
                 result.etSpeedrpm = Double.parseDouble(etSpeedrpm.getText().toString());
-                result.I0A = Double.parseDouble(etI0A.getText().toString());
-                result.ILoadedA = Double.parseDouble(etIloadedA.getText().toString());
+                
+                // Nutze calculateAverage für mehrere Werte
+                result.I0A = CalculationHelper.calculateAverage(etI0A.getText().toString());
+                result.ILoadedA = CalculationHelper.calculateAverage(etIloadedA.getText().toString());
+                
                 result.massKg = Double.parseDouble(etMassOnleverarmKg.getText().toString());
 
                 // Checkboxen auslesen
@@ -162,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                 result.isPressureChecked = cbPressureChecked.isChecked();
 
                 // Berechnung durchführen (Deine utils-Klasse)
-                utils.CalculationHelper.calculateAndFill(result);
+                CalculationHelper.calculateAndFill(result);
 
                 // In Datenbank speichern
                 AppDatabase.getDatabase(this).testDao().insertResult(result);
