@@ -1,5 +1,7 @@
 package utils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import data.TestResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,14 +9,44 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class CalculationHelper {
-    private static final double G = 9.81;
-    private static final double LEVER_HANG = 0.875;    // l_hang in m
-    private static final double LEVER_TIRE = 0.358;    // l_reifen in m
-    private static final double V_SUPPLY_DEFAULT = 12.0;
+    public static double G = 9.81;
+    public static double LEVER_HANG = 0.875;    // l_hang in m
+    public static double LEVER_TIRE = 0.358;    // l_reifen in m
+    public static double V_SUPPLY_DEFAULT = 12.0;
+    public static double MOTOR_SPEED_RPM = 213.0; // Default motor speed
+
+    private static final String PREFS_NAME = "CalculationConstants";
+
+    public static void loadConstants(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        G = Double.longBitsToDouble(prefs.getLong("G", Double.doubleToLongBits(9.81)));
+        LEVER_HANG = Double.longBitsToDouble(prefs.getLong("LEVER_HANG", Double.doubleToLongBits(0.875)));
+        LEVER_TIRE = Double.longBitsToDouble(prefs.getLong("LEVER_TIRE", Double.doubleToLongBits(0.358)));
+        V_SUPPLY_DEFAULT = Double.longBitsToDouble(prefs.getLong("V_SUPPLY_DEFAULT", Double.doubleToLongBits(12.0)));
+        MOTOR_SPEED_RPM = Double.longBitsToDouble(prefs.getLong("MOTOR_SPEED_RPM", Double.doubleToLongBits(213.0)));
+    }
+
+    public static void saveConstants(Context context, double g, double lHang, double lTire, double vSupply, double rpm) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit();
+        editor.putLong("G", Double.doubleToLongBits(g));
+        editor.putLong("LEVER_HANG", Double.doubleToLongBits(lHang));
+        editor.putLong("LEVER_TIRE", Double.doubleToLongBits(lTire));
+        editor.putLong("V_SUPPLY_DEFAULT", Double.doubleToLongBits(vSupply));
+        editor.putLong("MOTOR_SPEED_RPM", Double.doubleToLongBits(rpm));
+        editor.apply();
+        
+        // Update local variables
+        G = g;
+        LEVER_HANG = lHang;
+        LEVER_TIRE = lTire;
+        V_SUPPLY_DEFAULT = vSupply;
+        MOTOR_SPEED_RPM = rpm;
+    }
 
     public static void processAndCalculate(TestResult res) {
         // --- 1. Perform all calculations with full precision ---
-        
+        res.etSpeedrpm = MOTOR_SPEED_RPM; // Set the constant value
+
         // Get Diameter (d) and calculate Circumference (U)
         double d = extractDiameterFromEtrto(res.tireName);
         double U = Math.PI * d;
@@ -43,13 +75,12 @@ public class CalculationHelper {
         res.pressureBar = round(res.pressureBar, 2);
         res.temperatureC = round(res.temperatureC, 2);
         res.speedKmh = round(rawSpeedKmh, 2);
-        res.etSpeedrpm = round(res.etSpeedrpm, 0);
         
         res.massKg = round(res.massKg, 3);
         res.weightOnTire = round(mEff, 3);
         
-        res.idleCurrentAmp = round(res.idleCurrentAmp, 3);
-        res.loadCurrentAmp = round(res.loadCurrentAmp, 3);
+        // res.idleCurrentAmp and res.loadCurrentAmp are now Strings containing raw input
+        
         res.I0A = round(res.I0A, 3);
         res.ILoadedA = round(res.ILoadedA, 3);
         
@@ -71,9 +102,19 @@ public class CalculationHelper {
         }
     }
 
+    public static double parseInput(String input) {
+        if (input == null || input.isBlank()) return 0.0;
+        try {
+            String clean = input.trim().replace(",", ".");
+            return Double.parseDouble(clean);
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
+    }
+
     public static double calculateAverage(String input) {
         if (input == null || input.isBlank()) return 0.0;
-        String[] parts = input.split("[,\\s;]+");
+        String[] parts = input.split("[\\s;\\t]+");
         double sum = 0;
         int count = 0;
         for (String part : parts) {
@@ -90,7 +131,7 @@ public class CalculationHelper {
 
     public static double getFirstValue(String input) {
         if (input == null || input.isBlank()) return 0.0;
-        String[] parts = input.split("[,\\s;]+");
+        String[] parts = input.split("[\\s;\\t]+");
         for (String part : parts) {
             try {
                 String cleanPart = part.trim().replace(",", ".");

@@ -44,10 +44,10 @@ public class TestResult {
     public double weightOnTire;  // WeightOnTire (calculated mEff)
     
     @ColumnInfo(name = "Idel_Current")
-    public double idleCurrentAmp; // IdelCurrent (single reading or raw)
+    public String idleCurrentAmp; // Stores all entered values as String
     
     @ColumnInfo(name = "Loaded_Current")
-    public double loadCurrentAmp; // LoadedCurrent (single reading or raw)
+    public String loadCurrentAmp; // Stores all entered values as String
     
     @ColumnInfo(name = "Mean_Idel_Current")
     public double I0A;            // MeanIdelCurrent

@@ -46,6 +46,7 @@
             • 19  - rim inner width in mm<br><br>
             Read these numbers directly from the tire sidewall and rim.
             More info <a href="https://www.taylor-wheels.de/blog/mit-etrto-die-reifengroesse-fuer-das-fahrrad-bestimmen/?srsltid=AfmBOop2AcMjX1V-CMhO7HzU1SKUokSLCDlrTVusVtbsU3XCisSrt-I3">here</a>.]]></string>
+    <string name="help">help</string>
     
     <string name="tire_pressure_bar">Tire pressure [bar]</string>
     <string name="temperature_celsius">Temperature [°C]</string>
@@ -68,4 +69,5 @@
     <string name="list">List</string>
     <string name="back">Back</string>
     <string name="delete">Delete</string>
+    <string name="edit_constants">Edit Constants</string>
 </resources>

@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.Executors;
 
-@Database(entities = {User.class, TestResult.class}, version = 6, exportSchema = false)
+@Database(entities = {User.class, TestResult.class}, version = 7, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract TestDao testDao();
     private static volatile AppDatabase INSTANCE;

@@ -107,15 +107,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fl_graph">
 
-                <EditText
-                    android:id="@+id/et_tire_name"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="name"
-                    android:hint="@string/tire_example_etrto"
-                    android:inputType="text"
-                    android:paddingBottom="15dp"
-                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <EditText
+                        android:id="@+id/et_tire_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:autofillHints="name"
+                        android:hint="@string/tire_example_etrto"
+                        android:inputType="text"
+                        android:paddingBottom="15dp"
+                        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+                    <TextView
+                        android:id="@+id/tv_tire_help"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text="@string/help"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="12sp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground" />
+                </LinearLayout>
 
                 <!-- to calculate the mass applied on the tire -->
                 <EditText
@@ -125,18 +145,7 @@
                     android:layout_marginTop="9dp"
                     android:autofillHints="mass"
                     android:hint="@string/mass_on_lever_arm_kg"
-                    android:inputType="numberDecimal"
-                    android:paddingBottom="15dp"
-                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
-
-                <EditText
-                    android:id="@+id/et_motor_speed_rpm"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:autofillHints="speed"
-                    android:hint="@string/motor_speed_rpm"
-                    android:inputType="numberDecimal"
+                    android:inputType="text"
                     android:paddingBottom="15dp"
                     tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
@@ -169,7 +178,7 @@
                     android:layout_marginTop="9dp"
                     android:autofillHints="pressure"
                     android:hint="@string/tire_pressure_bar"
-                    android:inputType="numberDecimal"
+                    android:inputType="text"
                     android:paddingBottom="15dp"
                     tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
@@ -180,7 +189,7 @@
                     android:layout_marginTop="9dp"
                     android:autofillHints="temperature"
                     android:hint="@string/temperature_celsius"
-                    android:inputType="numberDecimal"
+                    android:inputType="text"
                     android:paddingBottom="15dp"
                     tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
             </LinearLayout>
@@ -215,6 +224,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tire_pressure_checked_later" />
+
+                <Button
+                    android:id="@+id/btn_edit_constants"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/edit_constants"
+                    android:textSize="12sp"
+                    app:icon="@android:drawable/ic_menu_manage" />
+
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

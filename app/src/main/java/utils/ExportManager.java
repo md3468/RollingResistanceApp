@@ -35,8 +35,8 @@ public class ExportManager {
                         .append(res.isPressureChecked ? "Yes" : "No").append(";")
                         .append(String.format(Locale.US, "%.3f", res.massKg)).append(";")
                         .append(String.format(Locale.US, "%.3f", res.weightOnTire)).append(";")
-                        .append(String.format(Locale.US, "%.3f", res.idleCurrentAmp)).append(";")
-                        .append(String.format(Locale.US, "%.3f", res.loadCurrentAmp)).append(";")
+                        .append(res.idleCurrentAmp != null ? res.idleCurrentAmp : "").append(";")
+                        .append(res.loadCurrentAmp != null ? res.loadCurrentAmp : "").append(";")
                         .append(String.format(Locale.US, "%.3f", res.I0A)).append(";")
                         .append(String.format(Locale.US, "%.3f", res.ILoadedA)).append(";")
                         .append(String.format(Locale.US, "%.3f", res.powerP0)).append(";")
@@ -76,8 +76,8 @@ public class ExportManager {
                 table.addCell(res.isPressureChecked ? "X" : "");
                 table.addCell(String.format("%.3f", res.massKg));
                 table.addCell(String.format("%.3f", res.weightOnTire));
-                table.addCell(String.format("%.3f", res.idleCurrentAmp));
-                table.addCell(String.format("%.3f", res.loadCurrentAmp));
+                table.addCell(res.idleCurrentAmp != null ? res.idleCurrentAmp : "");
+                table.addCell(res.loadCurrentAmp != null ? res.loadCurrentAmp : "");
                 table.addCell(String.format("%.3f", res.I0A));
                 table.addCell(String.format("%.3f", res.ILoadedA));
                 table.addCell(String.format("%.3f", res.powerP0));
