@@ -11,8 +11,7 @@ import android.content.Context;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 
 public class ExportManager {
@@ -21,17 +20,29 @@ public class ExportManager {
         File file = new File(context.getExternalFilesDir(null), "RollingResistance_Export.csv");
         try (FileWriter writer = new FileWriter(file)) {
             // Header
-            writer.append("Timestamp;Tire;Pressure(bar);Speed(kmh);Mode;P0(W);PLoad(W);Crr\n");
+            writer.append("ID;User_ID;Tire_Name/Size;Pressure_[Bar];Temperature;Speed_[Km/h];Speed_[RPM];Tubeless;Temperature_Stable;Pressure_Checked;Weight_on_Lever;Weight_on_Tire;Idel_Current;Loaded_Current;Mean_Idel_Current;Mean_Loaded_Current;Power_[P0];Power_[PLoad];Prr;Crr\n");
 
             for (TestResult res : results) {
-                writer.append(String.valueOf(res.timestamp)).append(";")
+                writer.append(String.valueOf(res.id)).append(";")
+                        .append(String.valueOf(res.userId)).append(";")
                         .append(res.tireName).append(";")
-                        .append(String.valueOf(res.pressureBar)).append(";")
-                        .append(String.valueOf(res.speedKmh)).append(";")
-                        .append(res.isManualInput ? "Manual" : "ESP").append(";")
-                        .append(String.valueOf(res.I0A)).append(";")
-                        .append(String.valueOf(res.ILoadedA)).append(";")
-                        .append(String.format("%.6f", res.calculatedCrr)).append("\n");
+                        .append(String.format(Locale.US, "%.2f", res.pressureBar)).append(";")
+                        .append(String.format(Locale.US, "%.2f", res.temperatureC)).append(";")
+                        .append(String.format(Locale.US, "%.2f", res.speedKmh)).append(";")
+                        .append(String.format(Locale.US, "%.0f", res.etSpeedrpm)).append(";")
+                        .append(res.isTubeless ? "Yes" : "No").append(";")
+                        .append(res.isTempStable ? "Yes" : "No").append(";")
+                        .append(res.isPressureChecked ? "Yes" : "No").append(";")
+                        .append(String.format(Locale.US, "%.3f", res.massKg)).append(";")
+                        .append(String.format(Locale.US, "%.3f", res.weightOnTire)).append(";")
+                        .append(String.format(Locale.US, "%.3f", res.idleCurrentAmp)).append(";")
+                        .append(String.format(Locale.US, "%.3f", res.loadCurrentAmp)).append(";")
+                        .append(String.format(Locale.US, "%.3f", res.I0A)).append(";")
+                        .append(String.format(Locale.US, "%.3f", res.ILoadedA)).append(";")
+                        .append(String.format(Locale.US, "%.3f", res.powerP0)).append(";")
+                        .append(String.format(Locale.US, "%.3f", res.powerPLoad)).append(";")
+                        .append(String.format(Locale.US, "%.3f", res.pRR)).append(";")
+                        .append(String.format(Locale.US, "%.6f", res.calculatedCrr)).append("\n");
             }
             return file;
         } catch (Exception e) {
@@ -39,6 +50,7 @@ public class ExportManager {
             return null;
         }
     }
+
     public static void createPdfReport(File file, List<TestResult> results) {
         try {
             PdfWriter writer = new PdfWriter(file);
@@ -47,32 +59,37 @@ public class ExportManager {
 
             document.add(new Paragraph("Rolling Resistance Report").setFontSize(20).setBold());
 
-            // Gruppierung nach Reifenname, um Vergleiche zu ermöglichen
-            Map<String, List<TestResult>> groupedData = results.stream()
-                    .collect(Collectors.groupingBy(res -> res.tireName));
+            Table table = new Table(20);
+            String[] headers = {"ID", "User_ID", "Tire_Name/Size", "Pressure_[Bar]", "Temperature", "Speed_[Km/h]", "Speed_[RPM]", "Tubeless", "Temp_Stable", "Pres_Checked", "Weight_Lever", "Weight_Tire", "Idle_Cur", "Load_Cur", "Mean_Idle", "Mean_Load", "P0", "PLoad", "Prr", "Crr"};
+            for (String h : headers) table.addCell(h);
 
-            for (String tire : groupedData.keySet()) {
-                document.add(new Paragraph("Tire: " + tire).setBold());
-
-                Table table = new Table(4); // 4 Spalten
-                table.addCell("Pressure (bar)");
-                table.addCell("Speed (km/h)");
-                table.addCell("Power Loss (W)");
-                table.addCell("Crr Value");
-
-                for (TestResult res : groupedData.get(tire)) {
-                    table.addCell(String.valueOf(res.pressureBar));
-                    table.addCell(String.valueOf(res.speedKmh));
-                    table.addCell(String.format("%.2f", res.ILoadedA - res.I0A));
-                    table.addCell(String.format("%.6f", res.calculatedCrr));
-                }
-                document.add(table);
+            for (TestResult res : results) {
+                table.addCell(String.valueOf(res.id));
+                table.addCell(String.valueOf(res.userId));
+                table.addCell(res.tireName);
+                table.addCell(String.format("%.2f", res.pressureBar));
+                table.addCell(String.format("%.2f", res.temperatureC));
+                table.addCell(String.format("%.2f", res.speedKmh));
+                table.addCell(String.format("%.0f", res.etSpeedrpm));
+                table.addCell(res.isTubeless ? "X" : "");
+                table.addCell(res.isTempStable ? "X" : "");
+                table.addCell(res.isPressureChecked ? "X" : "");
+                table.addCell(String.format("%.3f", res.massKg));
+                table.addCell(String.format("%.3f", res.weightOnTire));
+                table.addCell(String.format("%.3f", res.idleCurrentAmp));
+                table.addCell(String.format("%.3f", res.loadCurrentAmp));
+                table.addCell(String.format("%.3f", res.I0A));
+                table.addCell(String.format("%.3f", res.ILoadedA));
+                table.addCell(String.format("%.3f", res.powerP0));
+                table.addCell(String.format("%.3f", res.powerPLoad));
+                table.addCell(String.format("%.3f", res.pRR));
+                table.addCell(String.format("%.6f", res.calculatedCrr));
             }
 
+            document.add(table);
             document.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 }

@@ -37,8 +37,8 @@ public class TestResultAdapter extends RecyclerView.Adapter<TestResultAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TestResult result = results.get(position);
         holder.tvTireName.setText(result.tireName);
-        holder.tvCrr.setText(String.format(Locale.getDefault(), "Crr: %.5f", result.calculatedCrr));
-        holder.tvDetails.setText(String.format(Locale.getDefault(), "%.1f bar | %.1f km/h", result.pressureBar, result.speedKmh));
+        holder.tvCrr.setText(String.format(Locale.getDefault(), "Crr: %.6f", result.calculatedCrr));
+        holder.tvDetails.setText(String.format(Locale.getDefault(), "%.2f bar | %.2f km/h", result.pressureBar, result.speedKmh));
 
         holder.btnDeleteItem.setOnClickListener(v -> {
             if (deleteListener != null) {

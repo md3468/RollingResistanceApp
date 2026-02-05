@@ -154,6 +154,10 @@ public class MainActivity extends AppCompatActivity {
                 result.temperatureC = Double.parseDouble(etTemperatureC.getText().toString());
                 result.etSpeedrpm = Double.parseDouble(etSpeedrpm.getText().toString());
                 
+                // Store raw values first (for single reading or first of many)
+                result.idleCurrentAmp = CalculationHelper.getFirstValue(etI0A.getText().toString());
+                result.loadCurrentAmp = CalculationHelper.getFirstValue(etIloadedA.getText().toString());
+                
                 // Nutze calculateAverage für mehrere Werte
                 result.I0A = CalculationHelper.calculateAverage(etI0A.getText().toString());
                 result.ILoadedA = CalculationHelper.calculateAverage(etIloadedA.getText().toString());

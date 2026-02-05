@@ -16,6 +16,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import java.util.concurrent.Executors;
+
 import data.AppDatabase;
 import data.User;
 
@@ -87,32 +89,40 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            AppDatabase db = AppDatabase.getDatabase(this);
-
-            if (isLoginMode) {
-                User userInDb = db.testDao().getUserByName(user);
-
-                if (userInDb != null && userInDb.password.equals(pass)) {
-                    userPrefs.edit().putInt("currentUserId", userInDb.id).apply();
-                    userPrefs.edit().putString("currentUser", user).apply();
-
-                    startActivity(new Intent(LoginActivity.this, SelectionActivity.class));
-                    finish();
+            Executors.newSingleThreadExecutor().execute(() -> {
+                AppDatabase db = AppDatabase.getDatabase(this);
+                if (isLoginMode) {
+                    User userInDb = db.testDao().getUserByName(user);
+                    runOnUiThread(() -> {
+                        if (userInDb != null && userInDb.password.equals(pass)) {
+                            userPrefs.edit().putInt("currentUserId", userInDb.id).apply();
+                            userPrefs.edit().putString("currentUser", user).apply();
+                            startActivity(new Intent(LoginActivity.this, SelectionActivity.class));
+                            finish();
+                        } else {
+                            Toast.makeText(this, R.string.login_failed, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
-                    Toast.makeText(this, R.string.login_failed, Toast.LENGTH_SHORT).show();
+                    User existing = db.testDao().getUserByName(user);
+                    runOnUiThread(() -> {
+                        if (existing != null) {
+                            Toast.makeText(this, R.string.user_already_exists, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Executors.newSingleThreadExecutor().execute(() -> {
+                                db.testDao().insertUser(new User(user, pass));
+                                runOnUiThread(() -> {
+                                    Toast.makeText(this, R.string.registration_success, Toast.LENGTH_SHORT).show();
+                                    isLoginMode = true;
+                                    tvTitle.setText(R.string.login_title);
+                                    btnLogin.setText(R.string.login_button);
+                                    tvSwitchMode.setText(R.string.go_to_register_text);
+                                });
+                            });
+                        }
+                    });
                 }
-            } else {
-                if (db.testDao().getUserByName(user) != null) {
-                    Toast.makeText(this, R.string.user_already_exists, Toast.LENGTH_SHORT).show();
-                } else {
-                    db.testDao().insertUser(new User(user, pass));
-                    Toast.makeText(this, R.string.registration_success, Toast.LENGTH_SHORT).show();
-                    isLoginMode = true;
-                    tvTitle.setText(R.string.login_title);
-                    btnLogin.setText(R.string.login_button);
-                    tvSwitchMode.setText(R.string.go_to_register_text);
-                }
-            }
+            });
         });
     }
 }
