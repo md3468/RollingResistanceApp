@@ -37,7 +37,7 @@
     <string name="placeholder_graphic">Placeholder graphic</string>
 
     <!-- Text field -->
-    <string name="tire_example_etrto">Tire name / size in ETRTO (e.g. 40 622 19)</string>
+    <string name="tire_example_etrto">Tire name / size in ETRTO \t\t\t\t<small><i>(e.g. 40 622 19)</i></small></string>
     <string name="etrto_info_title">ETRTO Information</string>
     <string name="etrto_info_text" tools:ignore="Typos"><![CDATA[The ETRTO size defines the exact tire and rim geometry.<br><br>
             Example: 40 622 19<br>
@@ -49,10 +49,10 @@
     <string name="help">help</string>
     
     <string name="tire_pressure_bar">Tire pressure [bar]</string>
-    <string name="temperature_celsius">Temperature [°C]</string>
+    <string name="temperature_celsius">Tire temperature [°C]</string>
     <string name="motor_speed_rpm">Motor speed [rpm]</string>
-    <string name="idle_power_I0_A">Idle current I<sub><small>0</small></sub> [A]</string>
-    <string name="loaded_power_Iloaded_A">Loaded current I<sub><small>loaded</small></sub> [A]</string>
+    <string name="idle_power_I0_A">Idle currents I<sub><small>0</small></sub> [A] \t\t\t\t\t\t\t\t\t\t<small><i>(e.g. 0.97 0.98 → mean)</i></small></string>
+    <string name="loaded_power_Iloaded_A">Loaded currents I<sub><small>load</small></sub> [A] \t\t\t\t<small><i>(e.g. 2.31 2.39 → mean)</i></small></string>
     <string name="mass_on_lever_arm_kg">Weight on lever arm [kg]</string>
 
     <!-- Checkbox -->

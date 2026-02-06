@@ -211,19 +211,32 @@
                     android:id="@+id/cb_tubeless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="0dp"
                     android:text="@string/tire_tubeless" />
 
                 <CheckBox
                     android:id="@+id/cb_temp_stable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="0dp"
                     android:text="@string/temperature_stable" />
 
                 <CheckBox
                     android:id="@+id/cb_pressure_checked"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="0dp"
                     android:text="@string/tire_pressure_checked_later" />
+
 
                 <Button
                     android:id="@+id/btn_edit_constants"
