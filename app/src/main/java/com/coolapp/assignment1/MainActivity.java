@@ -198,11 +198,45 @@ public class MainActivity extends AppCompatActivity {
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setPadding(40, 40, 40, 20);
 
-        final EditText etG = addConstantRow(mainLayout, "G:", String.valueOf(CalculationHelper.G), "(e.g. 9.81)");
-        final EditText etLHang = addConstantRow(mainLayout, "L_Hang:", String.valueOf(CalculationHelper.LEVER_HANG), "(e.g. 0.875)");
-        final EditText etLTire = addConstantRow(mainLayout, "L_Tire:", String.valueOf(CalculationHelper.LEVER_TIRE), "(e.g. 0.358)");
-        final EditText etVSupply = addConstantRow(mainLayout, "V_Supply:", String.valueOf(CalculationHelper.V_SUPPLY_DEFAULT), "(e.g. 12.0)");
-        final EditText etRpm = addConstantRow(mainLayout, "RPM:", String.valueOf(CalculationHelper.MOTOR_SPEED_RPM), "(e.g. 213.0)");
+        final EditText etG = addConstantRow(
+                mainLayout,
+                "Gravity:",
+                String.valueOf(CalculationHelper.G),
+                "m/s²",
+                "9.81"
+        );
+
+        final EditText etLHang = addConstantRow(
+                mainLayout,
+                "Hang Length:",
+                String.valueOf(CalculationHelper.LEVER_HANG),
+                "m",
+                "0.875"
+        );
+
+        final EditText etLTire = addConstantRow(
+                mainLayout,
+                "Tire Length:",
+                String.valueOf(CalculationHelper.LEVER_TIRE),
+                "m",
+                "0.358"
+        );
+
+        final EditText etVSupply = addConstantRow(
+                mainLayout,
+                "Voltage:",
+                String.valueOf(CalculationHelper.V_SUPPLY_DEFAULT),
+                "V",
+                "12.0"
+        );
+
+        final EditText etRpm = addConstantRow(
+                mainLayout,
+                "Motor Speed:",
+                String.valueOf(CalculationHelper.MOTOR_SPEED_RPM),
+                "RPM",
+                "213.0"
+        );
 
         builder.setView(mainLayout);
 
@@ -216,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
 
                 CalculationHelper.saveConstants(this, g, lHang, lTire, vSupply, rpm);
                 Toast.makeText(this, "Constants saved!", Toast.LENGTH_SHORT).show();
+
             } catch (Exception e) {
                 Toast.makeText(this, "Invalid input!", Toast.LENGTH_SHORT).show();
             }
@@ -226,38 +261,50 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private EditText addConstantRow(LinearLayout parent, String label, String value, String example) {
+
+    private EditText addConstantRow(
+            LinearLayout parent,
+            String label,
+            String value,
+            String unit,
+            String hint
+    ) {
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
         row.setGravity(Gravity.CENTER_VERTICAL);
-        LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        rowParams.setMargins(0, 4, 0, 4);
+
+        LinearLayout.LayoutParams rowParams =
+                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        rowParams.setMargins(0, 8, 0, 8);
         row.setLayoutParams(rowParams);
 
         TextView tvLabel = new TextView(this);
         tvLabel.setText(label);
-        tvLabel.setMinWidth(180); // Ensure consistent starting point for EditTexts
+        tvLabel.setMinWidth(180);
         tvLabel.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.2f));
 
         EditText editText = new EditText(this);
         editText.setText(value);
-        editText.setInputType(InputType.TYPE_CLASS_TEXT);
+        editText.setHint(hint);
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         editText.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.2f));
         editText.setGravity(Gravity.CENTER);
         editText.setPadding(0, 20, 0, 20);
 
-        TextView tvExample = new TextView(this);
-        tvExample.setText(example);
-        tvExample.setTextSize(12);
-        tvExample.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
-        tvExample.setPadding(10, 0, 0, 0);
-        tvExample.setGravity(Gravity.END);
+        TextView tvUnit = new TextView(this);
+        tvUnit.setText(unit);
+        tvUnit.setTextSize(14);
+        tvUnit.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 0.6f));
+        tvUnit.setGravity(Gravity.START);
+        tvUnit.setPadding(10, 0, 0, 0);
 
         row.addView(tvLabel);
         row.addView(editText);
-        row.addView(tvExample);
+        row.addView(tvUnit);
+
         parent.addView(row);
 
         return editText;
     }
+
 }
