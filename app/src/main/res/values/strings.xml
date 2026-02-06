@@ -47,7 +47,7 @@
             Read these numbers directly from the tire sidewall and rim.
             More info <a href="https://www.taylor-wheels.de/blog/mit-etrto-die-reifengroesse-fuer-das-fahrrad-bestimmen/?srsltid=AfmBOop2AcMjX1V-CMhO7HzU1SKUokSLCDlrTVusVtbsU3XCisSrt-I3">here</a>.]]></string>
     <string name="help">help</string>
-    
+
     <string name="tire_pressure_bar">Tire pressure [bar]</string>
     <string name="temperature_celsius">Temperature [°C]</string>
     <string name="motor_speed_rpm">Motor speed [rpm]</string>
@@ -64,7 +64,7 @@
     <string name="clear_input">Clear all</string>
     <string name="go_to_list">Go to List</string>
     <string name="save_to_list">Save</string>
-    <string name="proceed_to_measurements">Proceed to Measurements</string>
+    <string name="proceed_to_measurements">Start Measurement</string>
     <string name="export_pdf">Export PDF</string>
     <string name="list">List</string>
     <string name="back">Back</string>
