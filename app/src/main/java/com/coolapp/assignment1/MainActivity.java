@@ -27,12 +27,12 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import data.AppDatabase;
 import data.TestResult;
 import utils.CalculationHelper;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -101,6 +101,27 @@ public class MainActivity extends AppCompatActivity {
         EditText etIloadedA = findViewById(R.id.et_Iloaded_A);
         EditText etMassOnleverarmKg = findViewById(R.id.et_mass_on_lever_arm_kg);
 
+        // Insert ESP measurement (if available) into Iloaded_A
+        SharedPreferences espPrefs = getSharedPreferences("ESPData", Context.MODE_PRIVATE);
+        String espMeasurement = espPrefs.getString("lastMeasurement", null);
+        if (espMeasurement != null && !espMeasurement.trim().isEmpty()) {
+            if (!"FAIL!".equalsIgnoreCase(espMeasurement.trim())) {
+                String existingLoaded = etIloadedA.getText().toString();
+                String combinedLoaded;
+                if (existingLoaded == null || existingLoaded.trim().isEmpty()) {
+                    combinedLoaded = espMeasurement.trim();
+                } else {
+                    combinedLoaded = existingLoaded.trim() + " " + espMeasurement.trim();
+                }
+                etIloadedA.setText(combinedLoaded);
+                etIloadedA.setSelection(combinedLoaded.length());
+
+                Toast.makeText(this, "Measurement inserted from ESP", Toast.LENGTH_SHORT).show();
+            }
+            // Consume it so it won't auto-insert next time
+            espPrefs.edit().remove("lastMeasurement").apply();
+        }
+
         // Info-Popup für ETRTO mit klickbarem Link (jetzt über Help-Button)
         tvTireHelp.setOnClickListener(v -> {
             AlertDialog dialog = new AlertDialog.Builder(this)
@@ -161,15 +182,15 @@ public class MainActivity extends AppCompatActivity {
                 result.tireName = etTireName.getText().toString();
                 result.pressureBar = CalculationHelper.parseInput(etPressureBar.getText().toString());
                 result.temperatureC = CalculationHelper.parseInput(etTemperatureC.getText().toString());
-                
+
                 // Store raw values (all entered values as string)
                 result.idleCurrentAmp = etI0A.getText().toString();
                 result.loadCurrentAmp = etIloadedA.getText().toString();
-                
+
                 // Nutze calculateAverage für mehrere Werte
                 result.I0A = CalculationHelper.calculateAverage(etI0A.getText().toString());
                 result.ILoadedA = CalculationHelper.calculateAverage(etIloadedA.getText().toString());
-                
+
                 result.massKg = CalculationHelper.parseInput(etMassOnleverarmKg.getText().toString());
 
                 // Checkboxen auslesen
