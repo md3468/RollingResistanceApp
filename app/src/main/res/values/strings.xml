@@ -70,4 +70,5 @@
     <string name="back">Back</string>
     <string name="delete">Delete</string>
     <string name="edit_constants">Edit Constants</string>
+    <string name="search_for_esp_button">Search for ESP</string>
 </resources>
