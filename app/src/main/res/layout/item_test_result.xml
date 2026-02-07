@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:layout_marginVertical="4dp">
 
-    <!-- Background: Delete Button -->
     <LinearLayout
         android:id="@+id/view_background"
         android:layout_width="match_parent"
@@ -19,14 +18,13 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:background="@drawable/bg_delete_circle"
-            android:contentDescription="@string/delete"
+            android:contentDescription="Löschen"
             android:padding="14dp"
             android:scaleType="fitCenter"
             android:src="@android:drawable/ic_menu_delete"
             app:tint="@android:color/white" />
     </LinearLayout>
 
-    <!-- Foreground: Item Content -->
     <androidx.cardview.widget.CardView
         android:id="@+id/view_foreground"
         android:layout_width="match_parent"
@@ -38,38 +36,52 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:padding="12dp"
-            android:background="@android:color/transparent">
+            android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/tv_item_tire_name"
-                android:layout_width="match_parent"
+            <CheckBox
+                android:id="@+id/cb_select_item"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white" />
+                android:buttonTint="@android:color/white"
+                android:layout_marginEnd="8dp" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="4dp">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_item_crr"
-                    android:layout_width="0dp"
+                    android:id="@+id/tv_item_tire_name"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="#D1D1D1" />
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white" />
 
-                <TextView
-                    android:id="@+id/tv_item_details"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="end"
-                    android:textColor="#D1D1D1" />
+                    android:orientation="horizontal"
+                    android:layout_marginTop="4dp">
+
+                    <TextView
+                        android:id="@+id/tv_item_crr"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="#D1D1D1" />
+
+                    <TextView
+                        android:id="@+id/tv_item_details"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:textColor="#D1D1D1" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

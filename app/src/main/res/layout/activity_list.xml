@@ -40,7 +40,7 @@
 
     <!-- Export PDF Button -->
     <Button
-        android:id="@+id/btn_export_pdf"
+        android:id="@+id/btn_export"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -31,4 +31,6 @@ public interface TestDao {
 
     @Query("SELECT * FROM test_results WHERE User_ID = :uId ORDER BY timestamp DESC")
     List<TestResult> getAllResults(int uId);
+    @Query("SELECT DISTINCT `Tire_Name/Size` FROM test_results ORDER BY `Tire_Name/Size` ASC")
+    List<String> getAllUniqueTireNames();
 }

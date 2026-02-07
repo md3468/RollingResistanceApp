@@ -113,7 +113,7 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/et_tire_name"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

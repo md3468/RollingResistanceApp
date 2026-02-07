@@ -43,4 +43,9 @@ dependencies {
     annotationProcessor(libs.androidx.room.compiler) // Für Java zwingend!
     implementation(libs.itext.core)
     implementation(libs.mpandroidchart)
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.itextpdf:kernel:7.2.5")
+    implementation("com.itextpdf:layout:7.2.5")
+    implementation("com.itextpdf:io:7.2.5")
+    implementation("com.itextpdf:forms:7.2.5")
 }

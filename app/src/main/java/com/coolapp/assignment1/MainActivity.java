@@ -9,9 +9,10 @@ import android.text.Html;
 import android.text.InputType;
 import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -30,278 +31,219 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import java.util.List;
+
 import data.AppDatabase;
 import data.TestResult;
 import utils.CalculationHelper;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Global deklariert, damit alle Methoden darauf zugreifen können
+    private AppDatabase db;
+    private AutoCompleteTextView etTireName;
+    private EditText etPressureBar, etTemperatureC, etI0A, etIloadedA, etMassOnleverarmKg;
+    private CheckBox cbTubeless, cbTempStable, cbPressureChecked;
+
     @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Load calculation constants from SharedPreferences
         CalculationHelper.loadConstants(this);
-
-        // 1. Edge-to-Edge reactivities
         EdgeToEdge.enable(this);
-
         setContentView(R.layout.activity_main);
 
-        // 2. Listener für WindowInsets hinzufügen, um Padding anzupassen
+        // Datenbank initialisieren
+        db = AppDatabase.getDatabase(this);
+
+        // UI Elemente finden
+        initViews();
+
+        // Autofill für Reifennamen einrichten
+        setupTireNameAutoFill();
+
+        // Insets / Padding Logik
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            // Das Padding des Views anpassen, um die Systemleisten zu berücksichtigen
             v.setPadding(v.getPaddingLeft(), systemBars.top, v.getPaddingRight(), systemBars.bottom);
             return insets;
         });
 
-        // Back Button Logic
-        ImageButton btnBack = findViewById(R.id.btn_back);
-        btnBack.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, SelectionActivity.class);
-            startActivity(intent);
+        // Dark Mode Logic
+        setupDarkMode();
+
+        // Info-Popup
+        findViewById(R.id.tv_tire_help).setOnClickListener(v -> showEtrtoInfo());
+
+        // Button Listeners
+        findViewById(R.id.btn_back).setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, SelectionActivity.class));
             finish();
         });
 
-        SwitchMaterial darkModeSwitch = findViewById(R.id.switch_mode);
+        findViewById(R.id.btn_edit_constants).setOnClickListener(v -> showEditConstantsDialog());
 
-        // Lade die gespeicherte Einstellung
+        findViewById(R.id.btn_clear_input).setOnClickListener(v -> clearAllInputs());
+
+        findViewById(R.id.btn_go_to_list).setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, ListActivity.class));
+        });
+
+        findViewById(R.id.btn_save_to_list).setOnClickListener(v -> saveResult());
+
+        // ESP Messung einfügen
+        checkEspData();
+    }
+
+    private void initViews() {
+        etTireName = findViewById(R.id.et_tire_name);
+        etPressureBar = findViewById(R.id.et_pressure_bar);
+        etTemperatureC = findViewById(R.id.et_temperature_c);
+        etI0A = findViewById(R.id.et_I0_A);
+        etIloadedA = findViewById(R.id.et_Iloaded_A);
+        etMassOnleverarmKg = findViewById(R.id.et_mass_on_lever_arm_kg);
+        cbTubeless = findViewById(R.id.cb_tubeless);
+        cbTempStable = findViewById(R.id.cb_temp_stable);
+        cbPressureChecked = findViewById(R.id.cb_pressure_checked);
+    }
+
+    /**
+     * Lädt alle bisherigen Reifennamen aus der DB und setzt sie als Vorschläge
+     */
+    private void setupTireNameAutoFill() {
+        new Thread(() -> {
+            List<String> existingTires = db.testDao().getAllUniqueTireNames();
+            runOnUiThread(() -> {
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                        this,
+                        android.R.layout.simple_dropdown_item_1line,
+                        existingTires
+                );
+                etTireName.setAdapter(adapter);
+            });
+        }).start();
+    }
+
+    private void saveResult() {
+        try {
+            TestResult result = new TestResult();
+            SharedPreferences userPrefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+            result.userId = userPrefs.getInt("currentUserId", -1);
+
+            result.tireName = etTireName.getText().toString();
+            result.pressureBar = CalculationHelper.parseInput(etPressureBar.getText().toString());
+            result.temperatureC = CalculationHelper.parseInput(etTemperatureC.getText().toString());
+            result.idleCurrentAmp = etI0A.getText().toString();
+            result.loadCurrentAmp = etIloadedA.getText().toString();
+            result.I0A = CalculationHelper.calculateAverage(etI0A.getText().toString());
+            result.ILoadedA = CalculationHelper.calculateAverage(etIloadedA.getText().toString());
+            result.massKg = CalculationHelper.parseInput(etMassOnleverarmKg.getText().toString());
+            result.isTubeless = cbTubeless.isChecked();
+            result.isTempStable = cbTempStable.isChecked();
+            result.isPressureChecked = cbPressureChecked.isChecked();
+
+            CalculationHelper.calculateAndFill(result);
+
+            new Thread(() -> {
+                db.testDao().insertResult(result);
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Saved! Crr: " + String.format("%.5f", result.calculatedCrr), Toast.LENGTH_LONG).show();
+                    // Liste aktualisieren, falls ein neuer Name dazu kam
+                    setupTireNameAutoFill();
+                });
+            }).start();
+
+        } catch (Exception e) {
+            Toast.makeText(this, "Error: Check numeric fields!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void setupDarkMode() {
+        SwitchMaterial darkModeSwitch = findViewById(R.id.switch_mode);
         SharedPreferences sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
         boolean isDarkModeOn = sharedPreferences.getBoolean("isDarkModeOn", false);
 
-        // Setze den richtigen Modus beim Start
-        if (isDarkModeOn) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            darkModeSwitch.setChecked(true);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            darkModeSwitch.setChecked(false);
-        }
+        AppCompatDelegate.setDefaultNightMode(isDarkModeOn ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        darkModeSwitch.setChecked(isDarkModeOn);
 
         darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                editor.putBoolean("isDarkModeOn", true);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                editor.putBoolean("isDarkModeOn", false);
-            }
-            editor.apply();
+            sharedPreferences.edit().putBoolean("isDarkModeOn", isChecked).apply();
+            AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         });
+    }
 
-        // Find views
-        EditText etTireName = findViewById(R.id.et_tire_name);
-        TextView tvTireHelp = findViewById(R.id.tv_tire_help);
-        EditText etPressureBar = findViewById(R.id.et_pressure_bar);
-        EditText etTemperatureC = findViewById(R.id.et_temperature_c);
-        EditText etI0A = findViewById(R.id.et_I0_A);
-        EditText etIloadedA = findViewById(R.id.et_Iloaded_A);
-        EditText etMassOnleverarmKg = findViewById(R.id.et_mass_on_lever_arm_kg);
+    private void showEtrtoInfo() {
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.etrto_info_title)
+                .setMessage(Html.fromHtml(getString(R.string.etrto_info_text), Html.FROM_HTML_MODE_LEGACY))
+                .setPositiveButton("OK", (d, which) -> d.dismiss())
+                .show();
+        TextView messageView = dialog.findViewById(android.R.id.message);
+        if (messageView != null) messageView.setMovementMethod(LinkMovementMethod.getInstance());
+    }
 
-        // Insert ESP measurement (if available) into Iloaded_A
+    private void checkEspData() {
         SharedPreferences espPrefs = getSharedPreferences("ESPData", Context.MODE_PRIVATE);
         String espMeasurement = espPrefs.getString("lastMeasurement", null);
-        if (espMeasurement != null && !espMeasurement.trim().isEmpty()) {
-            if (!"FAIL!".equalsIgnoreCase(espMeasurement.trim())) {
-                String existingLoaded = etIloadedA.getText().toString();
-                String combinedLoaded;
-                if (existingLoaded == null || existingLoaded.trim().isEmpty()) {
-                    combinedLoaded = espMeasurement.trim();
-                } else {
-                    combinedLoaded = existingLoaded.trim() + " " + espMeasurement.trim();
-                }
-                etIloadedA.setText(combinedLoaded);
-                etIloadedA.setSelection(combinedLoaded.length());
-
-                Toast.makeText(this, "Measurement inserted from ESP", Toast.LENGTH_SHORT).show();
-            }
-            // Consume it so it won't auto-insert next time
+        if (espMeasurement != null && !espMeasurement.trim().isEmpty() && !"FAIL!".equalsIgnoreCase(espMeasurement)) {
+            String combined = etIloadedA.getText().toString().trim() + " " + espMeasurement.trim();
+            etIloadedA.setText(combined.trim());
             espPrefs.edit().remove("lastMeasurement").apply();
+            Toast.makeText(this, "ESP Data inserted", Toast.LENGTH_SHORT).show();
         }
+    }
 
-        // Info-Popup für ETRTO mit klickbarem Link (jetzt über Help-Button)
-        tvTireHelp.setOnClickListener(v -> {
-            AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setTitle(R.string.etrto_info_title)
-                    .setMessage(Html.fromHtml(getString(R.string.etrto_info_text), Html.FROM_HTML_MODE_LEGACY))
-                    .setPositiveButton("OK", (d, which) -> d.dismiss())
-                    .show();
-
-            // Macht den Link klickbar
-            TextView messageView = dialog.findViewById(android.R.id.message);
-            if (messageView != null) {
-                messageView.setMovementMethod(LinkMovementMethod.getInstance());
-            }
-        });
-
-        CheckBox cbTubeless = findViewById(R.id.cb_tubeless);
-        CheckBox cbTempStable = findViewById(R.id.cb_temp_stable);
-        CheckBox cbPressureChecked = findViewById(R.id.cb_pressure_checked);
-
-        Button btnEditConstants = findViewById(R.id.btn_edit_constants);
-        btnEditConstants.setOnClickListener(v -> showEditConstantsDialog());
-
-        Button btnClearInput = findViewById(R.id.btn_clear_input);
-
-        btnClearInput.setOnClickListener(v -> {
-            // Clear EditTexts
-            etTireName.setText("");
-            etPressureBar.setText("");
-            etTemperatureC.setText("");
-            etI0A.setText("");
-            etIloadedA.setText("");
-            etMassOnleverarmKg.setText("");
-
-            // Uncheck CheckBoxes
-            cbTubeless.setChecked(false);
-            cbTempStable.setChecked(false);
-            cbPressureChecked.setChecked(false);
-        });
-
-        Button btnGoToList = findViewById(R.id.btn_go_to_list);
-        btnGoToList.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ListActivity.class);
-            startActivity(intent);
-        });
-
-        Button btnSave = findViewById(R.id.btn_save_to_list);
-
-        btnSave.setOnClickListener(v -> {
-            try {
-                // Daten-Objekt erstellen
-                TestResult result = new TestResult();
-
-                // User-ID aus den Prefs holen (vom Login)
-                SharedPreferences userPrefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-                result.userId = userPrefs.getInt("currentUserId", -1);
-
-                // Werte aus den EditTexts ziehen (nutzt parseInput für Komma-Support)
-                result.tireName = etTireName.getText().toString();
-                result.pressureBar = CalculationHelper.parseInput(etPressureBar.getText().toString());
-                result.temperatureC = CalculationHelper.parseInput(etTemperatureC.getText().toString());
-
-                // Store raw values (all entered values as string)
-                result.idleCurrentAmp = etI0A.getText().toString();
-                result.loadCurrentAmp = etIloadedA.getText().toString();
-
-                // Nutze calculateAverage für mehrere Werte
-                result.I0A = CalculationHelper.calculateAverage(etI0A.getText().toString());
-                result.ILoadedA = CalculationHelper.calculateAverage(etIloadedA.getText().toString());
-
-                result.massKg = CalculationHelper.parseInput(etMassOnleverarmKg.getText().toString());
-
-                // Checkboxen auslesen
-                result.isTubeless = cbTubeless.isChecked();
-                result.isTempStable = cbTempStable.isChecked();
-                result.isPressureChecked = cbPressureChecked.isChecked();
-
-                // Berechnung durchführen (Deine utils-Klasse)
-                CalculationHelper.calculateAndFill(result);
-
-                // In Datenbank speichern
-                AppDatabase.getDatabase(this).testDao().insertResult(result);
-
-                Toast.makeText(this, "Saved successfully! Crr: " + String.format("%.5f", result.calculatedCrr), Toast.LENGTH_LONG).show();
-            } catch (Exception e) {
-                Toast.makeText(this, "Error: Please check if all numeric fields are filled!", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void clearAllInputs() {
+        etTireName.setText("");
+        etPressureBar.setText("");
+        etTemperatureC.setText("");
+        etI0A.setText("");
+        etIloadedA.setText("");
+        etMassOnleverarmKg.setText("");
+        cbTubeless.setChecked(false);
+        cbTempStable.setChecked(false);
+        cbPressureChecked.setChecked(false);
     }
 
     private void showEditConstantsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.edit_constants);
-
         LinearLayout mainLayout = new LinearLayout(this);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setPadding(40, 40, 40, 20);
 
-        final EditText etG = addConstantRow(
-                mainLayout,
-                "Gravity:",
-                String.valueOf(CalculationHelper.G),
-                "m/s²",
-                "9.81"
-        );
-
-        final EditText etLHang = addConstantRow(
-                mainLayout,
-                "Hang Length:",
-                String.valueOf(CalculationHelper.LEVER_HANG),
-                "m",
-                "0.875"
-        );
-
-        final EditText etLTire = addConstantRow(
-                mainLayout,
-                "Tire Length:",
-                String.valueOf(CalculationHelper.LEVER_TIRE),
-                "m",
-                "0.358"
-        );
-
-        final EditText etVSupply = addConstantRow(
-                mainLayout,
-                "Voltage:",
-                String.valueOf(CalculationHelper.V_SUPPLY_DEFAULT),
-                "V",
-                "12.0"
-        );
-
-        final EditText etRpm = addConstantRow(
-                mainLayout,
-                "Motor Speed:",
-                String.valueOf(CalculationHelper.MOTOR_SPEED_RPM),
-                "RPM",
-                "213.0"
-        );
+        final EditText etG = addConstantRow(mainLayout, "Gravity:", String.valueOf(CalculationHelper.G), "m/s²", "9.81");
+        final EditText etLHang = addConstantRow(mainLayout, "Hang Length:", String.valueOf(CalculationHelper.LEVER_HANG), "m", "0.875");
+        final EditText etLTire = addConstantRow(mainLayout, "Tire Length:", String.valueOf(CalculationHelper.LEVER_TIRE), "m", "0.358");
+        final EditText etVSupply = addConstantRow(mainLayout, "Voltage:", String.valueOf(CalculationHelper.V_SUPPLY_DEFAULT), "V", "12.0");
+        final EditText etRpm = addConstantRow(mainLayout, "Motor Speed:", String.valueOf(CalculationHelper.MOTOR_SPEED_RPM), "RPM", "213.0");
 
         builder.setView(mainLayout);
-
         builder.setPositiveButton("Save", (dialog, which) -> {
             try {
-                double g = CalculationHelper.parseInput(etG.getText().toString());
-                double lHang = CalculationHelper.parseInput(etLHang.getText().toString());
-                double lTire = CalculationHelper.parseInput(etLTire.getText().toString());
-                double vSupply = CalculationHelper.parseInput(etVSupply.getText().toString());
-                double rpm = CalculationHelper.parseInput(etRpm.getText().toString());
-
-                CalculationHelper.saveConstants(this, g, lHang, lTire, vSupply, rpm);
+                CalculationHelper.saveConstants(this,
+                        CalculationHelper.parseInput(etG.getText().toString()),
+                        CalculationHelper.parseInput(etLHang.getText().toString()),
+                        CalculationHelper.parseInput(etLTire.getText().toString()),
+                        CalculationHelper.parseInput(etVSupply.getText().toString()),
+                        CalculationHelper.parseInput(etRpm.getText().toString()));
                 Toast.makeText(this, "Constants saved!", Toast.LENGTH_SHORT).show();
-
-            } catch (Exception e) {
-                Toast.makeText(this, "Invalid input!", Toast.LENGTH_SHORT).show();
-            }
+            } catch (Exception e) { Toast.makeText(this, "Invalid input!", Toast.LENGTH_SHORT).show(); }
         });
-
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
-        builder.show();
+        builder.setNegativeButton("Cancel", null).show();
     }
 
-
-    private EditText addConstantRow(
-            LinearLayout parent,
-            String label,
-            String value,
-            String unit,
-            String hint
-    ) {
+    private EditText addConstantRow(LinearLayout parent, String label, String value, String unit, String hint) {
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
         row.setGravity(Gravity.CENTER_VERTICAL);
-
-        LinearLayout.LayoutParams rowParams =
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         rowParams.setMargins(0, 8, 0, 8);
         row.setLayoutParams(rowParams);
 
         TextView tvLabel = new TextView(this);
         tvLabel.setText(label);
-        tvLabel.setMinWidth(180);
         tvLabel.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.2f));
 
         EditText editText = new EditText(this);
@@ -309,23 +251,13 @@ public class MainActivity extends AppCompatActivity {
         editText.setHint(hint);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         editText.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.2f));
-        editText.setGravity(Gravity.CENTER);
-        editText.setPadding(0, 20, 0, 20);
 
         TextView tvUnit = new TextView(this);
         tvUnit.setText(unit);
-        tvUnit.setTextSize(14);
         tvUnit.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 0.6f));
-        tvUnit.setGravity(Gravity.START);
-        tvUnit.setPadding(10, 0, 0, 0);
 
-        row.addView(tvLabel);
-        row.addView(editText);
-        row.addView(tvUnit);
-
+        row.addView(tvLabel); row.addView(editText); row.addView(tvUnit);
         parent.addView(row);
-
         return editText;
     }
-
 }
