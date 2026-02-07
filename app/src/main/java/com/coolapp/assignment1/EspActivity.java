@@ -270,6 +270,7 @@ public class EspActivity extends AppCompatActivity {
 
         btnProceed.setEnabled(true);
         startActivity(new Intent(EspActivity.this, MainActivity.class));
+        finish();
     }
 
     private void disconnect() {
