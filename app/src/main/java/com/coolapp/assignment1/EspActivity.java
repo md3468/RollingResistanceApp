@@ -3,6 +3,7 @@ import android.Manifest; import android.bluetooth.BluetoothAdapter; import andro
 import androidx.activity.EdgeToEdge; import androidx.appcompat.app.AppCompatActivity; import androidx.appcompat.app.AppCompatDelegate; import androidx.core.app.ActivityCompat; import androidx.core.graphics.Insets; import androidx.core.view.ViewCompat; import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import java.io.IOException; import java.io.InputStream; import java.io.OutputStream; import java.util.ArrayList; import java.util.UUID;
+
 public class EspActivity extends AppCompatActivity {
     private SharedPreferences themePrefs;
     private BluetoothAdapter bluetoothAdapter;
