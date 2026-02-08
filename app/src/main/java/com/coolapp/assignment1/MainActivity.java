@@ -249,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
         EditText editText = new EditText(this);
         editText.setText(value);
         editText.setHint(hint);
+        editText.setGravity(Gravity.CENTER);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         editText.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.2f));
 
