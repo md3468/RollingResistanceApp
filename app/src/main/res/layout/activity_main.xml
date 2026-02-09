@@ -20,7 +20,8 @@
         android:src="@android:drawable/ic_menu_revert"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/back_button_tint" />
+        app:tint="@color/back_button_tint"
+        tools:ignore="DuplicateSpeakableTextCheck" />
 
     <!-- Header -->
     <TextView
@@ -49,7 +50,8 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        tools:ignore="TextContrastCheck" />
 
     <!-- Switch -->
     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -128,13 +130,14 @@
                         android:id="@+id/tv_tire_help"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:padding="8dp"
                         android:text="@string/help"
                         android:textColor="?attr/colorPrimary"
                         android:textSize="12sp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:background="?attr/selectableItemBackground" />
+                        tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
                 </LinearLayout>
 
                 <!-- to calculate the mass applied on the tire -->
@@ -211,31 +214,34 @@
                     android:id="@+id/cb_tubeless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minHeight="0dp"
                     android:minWidth="0dp"
+                    android:minHeight="0dp"
                     android:paddingTop="0dp"
                     android:paddingBottom="0dp"
-                    android:text="@string/tire_tubeless" />
+                    android:text="@string/tire_tubeless"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <CheckBox
                     android:id="@+id/cb_temp_stable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minHeight="0dp"
                     android:minWidth="0dp"
+                    android:minHeight="0dp"
                     android:paddingTop="0dp"
                     android:paddingBottom="0dp"
-                    android:text="@string/temperature_stable" />
+                    android:text="@string/temperature_stable"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <CheckBox
                     android:id="@+id/cb_pressure_checked"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minHeight="0dp"
                     android:minWidth="0dp"
+                    android:minHeight="0dp"
                     android:paddingTop="0dp"
                     android:paddingBottom="0dp"
-                    android:text="@string/tire_pressure_checked_later" />
+                    android:text="@string/tire_pressure_checked_later"
+                    tools:ignore="TouchTargetSizeCheck" />
 
 
                 <Button
@@ -246,7 +252,8 @@
                     android:layout_marginTop="8dp"
                     android:text="@string/edit_constants"
                     android:textSize="12sp"
-                    app:icon="@android:drawable/ic_menu_manage" />
+                    app:icon="@android:drawable/ic_menu_manage"
+                    tools:ignore="TextContrastCheck" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -271,7 +278,8 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@string/clear_input" />
+            android:text="@string/clear_input"
+            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
 
         <Button
             android:id="@+id/btn_go_to_list"
@@ -281,7 +289,8 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@string/go_to_list" />
+            android:text="@string/go_to_list"
+            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
 
         <Button
             android:id="@+id/btn_save_to_list"
@@ -291,6 +300,7 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@string/save_to_list" />
+            android:text="@string/save_to_list"
+            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

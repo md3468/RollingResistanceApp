@@ -48,7 +48,8 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@id/btn_back_to_main"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/btn_back_to_main" />
+        app:layout_constraintTop_toTopOf="@id/btn_back_to_main"
+        tools:ignore="TextContrastCheck" />
 
     <!-- Placeholder for list content -->
     <androidx.recyclerview.widget.RecyclerView

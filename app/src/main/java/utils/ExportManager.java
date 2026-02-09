@@ -3,7 +3,6 @@ package utils;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 
 import com.itextpdf.io.image.ImageDataFactory;
@@ -18,7 +17,6 @@ import com.itextpdf.layout.properties.UnitValue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -52,7 +50,7 @@ public class ExportManager {
                     .setBold()
                     .setMarginBottom(0)); // Kein Abstand nach unten
 
-            document.add(new Paragraph("Generated on: " + new java.util.Date().toString())
+            document.add(new Paragraph("Generated on: " + new java.util.Date())
                     .setFontSize(10)
                     .setMarginBottom(10));
 

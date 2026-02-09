@@ -9,14 +9,11 @@ import android.text.Html;
 import android.text.InputType;
 import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -86,9 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.btn_clear_input).setOnClickListener(v -> clearAllInputs());
 
-        findViewById(R.id.btn_go_to_list).setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, ListActivity.class));
-        });
+        findViewById(R.id.btn_go_to_list).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ListActivity.class)));
 
         findViewById(R.id.btn_save_to_list).setOnClickListener(v -> saveResult());
 
@@ -125,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
+    @SuppressLint("DefaultLocale")
     private void saveResult() {
         try {
             TestResult result = new TestResult();

@@ -1,5 +1,6 @@
 package com.coolapp.assignment1;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +82,7 @@ public class TestResultAdapter extends RecyclerView.Adapter<TestResultAdapter.Vi
         return results != null ? results.size() : 0;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setResults(List<TestResult> results) {
         this.results = results;
         notifyDataSetChanged();

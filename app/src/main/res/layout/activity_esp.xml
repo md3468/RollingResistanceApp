@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@color/activity_background">
+    android:background="@color/activity_background"
+    tools:ignore="VisualLintBounds">
 
     <ImageButton
         android:id="@+id/btn_back"
@@ -70,17 +72,19 @@
         android:text="@string/search_for_esp_button"
         app:layout_constraintBottom_toTopOf="@id/btn_connect"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="TextContrastCheck,VisualLintButtonSize" />
 
     <Button
         android:id="@+id/btn_connect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/connect_esp_button"
         android:layout_marginBottom="8dp"
+        android:text="@string/connect_esp_button"
         app:layout_constraintBottom_toTopOf="@id/btn_proceed"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        tools:ignore="TextContrastCheck,VisualLintButtonSize" />
 
     <Button
         android:id="@+id/btn_proceed"
@@ -90,6 +94,7 @@
         android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="VisualLintButtonSize" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

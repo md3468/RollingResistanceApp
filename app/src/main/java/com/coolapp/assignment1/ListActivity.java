@@ -15,12 +15,11 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.io.File;
+
 import java.util.ArrayList;
 import java.util.List;
 import data.AppDatabase;
 import data.TestResult;
-import utils.ExportManager;
 
 public class ListActivity extends AppCompatActivity implements TestResultAdapter.OnItemDeleteListener {
 
@@ -46,9 +45,7 @@ public class ListActivity extends AppCompatActivity implements TestResultAdapter
         findViewById(R.id.btn_back_to_main).setOnClickListener(v -> finish());
 
         // --- NEU: Export-Button Logik ---
-        findViewById(R.id.btn_export).setOnClickListener(v -> {
-            exportData();
-        });
+        findViewById(R.id.btn_export).setOnClickListener(v -> exportData());
 
         // RecyclerView Setup
         recyclerView = findViewById(R.id.rv_test_results);
@@ -91,6 +88,7 @@ public class ListActivity extends AppCompatActivity implements TestResultAdapter
             try {
                 // Wir öffnen einen Stream zum gewählten Speicherort
                 android.os.ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(uri, "w");
+                assert pfd != null;
                 java.io.FileOutputStream fileOutputStream = new java.io.FileOutputStream(pfd.getFileDescriptor());
 
                 // Wir müssen den ExportManager leicht anpassen, damit er einen Stream nimmt

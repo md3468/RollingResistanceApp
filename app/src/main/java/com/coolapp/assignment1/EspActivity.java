@@ -125,7 +125,7 @@ public class EspActivity extends AppCompatActivity {
             // Send command and wait for response (handled in handleReceivedLine)
             awaitingMeasurement = true;
             btnProceed.setEnabled(false);
-            sendMessage("START_MEASUREMENT");
+            sendMessage();
         });
     }
 
@@ -238,11 +238,11 @@ public class EspActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void sendMessage(String text) {
+    private void sendMessage() {
         ConnectedThread ct = connectedThread;
         if (ct != null) {
-            ct.write((text + "\n").getBytes());
-            runOnUiThread(() -> Toast.makeText(this, "TX: " + text, Toast.LENGTH_SHORT).show());
+            ct.write(("START_MEASUREMENT" + "\n").getBytes());
+            runOnUiThread(() -> Toast.makeText(this, "TX: " + "START_MEASUREMENT", Toast.LENGTH_SHORT).show());
         } else {
             Toast.makeText(this, "Not connected", Toast.LENGTH_SHORT).show();
         }

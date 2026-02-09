@@ -9,7 +9,7 @@ import java.util.List;
 @Dao
 public interface TestDao {
     @Insert
-    long insertUser(User user);
+    void insertUser(User user);
 
     @Query("SELECT * FROM users WHERE username = :name LIMIT 1")
     User getUserByName(String name);
